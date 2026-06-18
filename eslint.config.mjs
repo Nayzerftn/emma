@@ -13,6 +13,15 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Contenu français : les apostrophes droites sont volontaires.
+      "react/no-unescaped-entities": "off",
+      // Règle RC du React Compiler : faux positifs sur la synchro scroll/route
+      // (masthead transparent→solide, fermeture du menu au changement de page).
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

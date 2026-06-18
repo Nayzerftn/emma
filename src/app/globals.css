@@ -1,26 +1,221 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─────────────────────────────────────────────────────────────
+   NATATION CÔTE BASQUE — Design system
+   Light theme strict · éditorial noir & blanc · Montserrat.
+   Cinq couleurs, pas une de plus.
+   ───────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Palette imposée */
+  --color-ink: #111111; /* texte & aplats dominants */
+  --color-paper: #ffffff; /* fond dominant */
+  --color-sand: #f8f7f4; /* sections alternées, respiration */
+  --color-filet: #e7e5e0; /* hairlines & bordures fines */
+  --color-meta: #6b6b6b; /* légendes, métadonnées */
+
+  /* Typo — Montserrat partout (self-host via next/font) */
+  --font-display: var(--font-montserrat), system-ui, sans-serif;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+
+  /* Éditorial : pas de radius (hairlines nettes) */
+  --radius-none: 0px;
+
+  /* Échelle de type explicite & limitée */
+  --text-display: clamp(2.8rem, 8vw, 7rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.01em;
+  --text-display--font-weight: 900;
+
+  --text-h1: clamp(2rem, 5.2vw, 3.6rem);
+  --text-h1--line-height: 1.02;
+  --text-h1--letter-spacing: -0.01em;
+  --text-h1--font-weight: 900;
+
+  --text-h2: clamp(1.6rem, 3.6vw, 2.6rem);
+  --text-h2--line-height: 1.04;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2--font-weight: 900;
+
+  --text-h3: clamp(1.1rem, 2vw, 1.5rem);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 700;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.62;
+
+  --text-small: 0.8125rem;
+  --text-small--line-height: 1.5;
+
+  /* Easing maison */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Largeur de contenu */
+  --shell-max: 88rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  * {
+    border-color: var(--color-filet);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Focus clavier visible (a11y AA) */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  /* Liens hérités de l'éditorial : pas de soulignement brut */
+  a {
+    color: inherit;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Conteneur éditorial */
+  .shell {
+    width: 100%;
+    max-width: var(--shell-max);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .shell {
+      padding-inline: 4rem;
+    }
+  }
+
+  /* Largeur de ligne maîtrisée pour le corps de texte */
+  .measure {
+    max-width: 64ch;
+  }
+
+  /* Eyebrow / méta / légende : Montserrat 600 uppercase tracking large */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--color-meta);
+  }
+
+  /* Titre display = geste graphique */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 0.92;
+  }
+
+  /* Hairline (filet) */
+  .hairline {
+    border-color: var(--color-filet);
+  }
+
+  /* Section sombre (fond encre) */
+  .section-ink {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .section-ink .eyebrow {
+    color: color-mix(in srgb, var(--color-paper) 60%, transparent);
+  }
+
+  /* Numéro de séquence 01/02/03 */
+  .seq-number {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  /* Photos N&B duotone plein cadre (DA imposée) */
+  .duotone {
+    filter: grayscale(100%) contrast(1.02);
+  }
+
+  /* Masquer la scrollbar (marquee / slider tactile) */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Underline-draw au survol des liens */
+  .underline-draw {
+    position: relative;
+  }
+  .underline-draw::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.35em;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .underline-draw:hover::after,
+  .underline-draw:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* prefers-reduced-motion : on coupe les grosses animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
