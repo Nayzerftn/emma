@@ -55,7 +55,10 @@ export function HeroVideo({
         <source src={HERO_VIDEO_URL} type="video/mp4" />
       </video>
 
-      <div aria-hidden className="absolute inset-0 bg-black/45" />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/55 to-black/85"
+      />
 
       <div className="shell relative z-10 flex h-full flex-col justify-end pb-16 md:pb-24">
         <Eyebrow className="text-paper/85">{eyebrow}</Eyebrow>
