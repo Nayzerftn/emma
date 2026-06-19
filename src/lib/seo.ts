@@ -39,8 +39,6 @@ export function sportsActivityLocationLd() {
     sameAs: [SITE.instagram],
     address: {
       "@type": "PostalAddress",
-      streetAddress: POOL_ADDRESS.street,
-      postalCode: POOL_ADDRESS.postalCode,
       addressLocality: POOL_ADDRESS.city,
       addressRegion: "Pyrénées-Atlantiques",
       addressCountry: "FR",

@@ -32,13 +32,9 @@ export const KINE = {
     ],
   },
   experts: {
-    eyebrow: "Emma & Maïka · kinésiologues certifiées",
-    titleLines: ["Deux expertes,", "une mission."],
+    eyebrow: "Maïka · kinésiologue certifiée",
+    titleLines: ["Une experte,", "à votre écoute."],
     items: [
-      {
-        name: "Emma — Fondatrice de Natation Côte Basque",
-        text: "Kinésiologue certifiée, maître-nageuse et ancienne sauveteuse à Anglet.",
-      },
       {
         name: "Maïka — Spécialiste petite enfance",
         text: "Kinésiologue certifiée. Travaille en crèche et en MAM. Expertise unique pour les tout-petits dès 3 ans.",

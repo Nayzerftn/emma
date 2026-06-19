@@ -1,8 +1,8 @@
 /** PAGE 3 — BASSIN PRIVÉ (Annexe A). */
-import { RESERVATION_HREF } from "@/lib/constants";
+import { SQUARE_BOOKING_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const BOOK_HREF = `${RESERVATION_HREF}#bassin`;
+const BOOK_HREF = SQUARE_BOOKING_URL;
 
 export const BASSIN = {
   hero: {
@@ -41,9 +41,9 @@ export const BASSIN = {
   },
   infos: [
     {
-      label: "Adresse",
+      label: "Lieu",
       value:
-        "1415 av. de Biarritz, Bidart (Chambre d'hôtes Irigoyen) — petit parking sur la droite, bâtiment en face.",
+        "On se situe à Bidart, vous recevrez l'adresse exacte lors de la réservation.",
     },
     { label: "Disponibilité", value: "Tous les week-ends, toute l'année" },
     { label: "Enfants", value: "Mini-groupes de 3 maximum, même niveau" },

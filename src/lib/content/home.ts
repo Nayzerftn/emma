@@ -1,5 +1,11 @@
 /** PAGE 1 — ACCUEIL (Annexe A, copy exact, zéro émoji). */
-import { CITIES, RESERVATION_HREF, WHATSAPP, waLink } from "@/lib/constants";
+import {
+  CITIES,
+  RESERVATION_HREF,
+  SQUARE_BOOKING_URL,
+  WHATSAPP,
+  waLink,
+} from "@/lib/constants";
 import type { CtaButton, IllustratedSection, Offer } from "@/lib/content/types";
 
 export const HOME = {
@@ -72,7 +78,7 @@ export const HOME = {
   illustrated: [
     {
       quoteLines: ["Un bassin", "rien que", "pour vous."],
-      meta: "Bassin privé · 1415 av. de Biarritz, Bidart",
+      meta: "Bassin privé · Bidart",
       photo: "bassin",
     },
     {
@@ -111,7 +117,7 @@ export const HOME = {
     buttons: [
       {
         label: "Je réserve mon cours en bassin privé",
-        href: `${RESERVATION_HREF}#bassin`,
+        href: SQUARE_BOOKING_URL,
         kind: "primary",
       },
       {

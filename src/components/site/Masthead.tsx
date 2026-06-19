@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV_LINKS, RESERVATION_HREF } from "@/lib/constants";
+import { NAV_LINKS, RESERVATION_HREF, SQUARE_BOOKING_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -140,17 +140,26 @@ export function Masthead() {
             </button>
           </div>
           <nav className="shell flex flex-1 flex-col justify-center gap-1 pb-16">
-            <Link href="/" className="display text-ink py-1 text-4xl">
+            <Link href="/" className="display text-ink py-1 text-2xl">
               Accueil
             </Link>
             {NAV_LINKS.map((l) => (
-              <Link key={l.href} href={l.href} className="display text-ink py-1 text-4xl">
+              <Link key={l.href} href={l.href} className="display text-ink py-1 text-2xl">
                 {l.label}
               </Link>
             ))}
-            <Button asChild variant="primary" size="lg" className="mt-8 w-full">
-              <Link href={RESERVATION_HREF}>Réserver</Link>
-            </Button>
+            <div className="mt-8 flex flex-col gap-3">
+              <Button asChild variant="primary" size="lg" className="w-full">
+                <Link href={`${RESERVATION_HREF}?type=domicile#en-ligne`}>
+                  Réserver à domicile
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="w-full">
+                <a href={SQUARE_BOOKING_URL} target="_blank" rel="noopener noreferrer">
+                  Notre bassin privé
+                </a>
+              </Button>
+            </div>
           </nav>
         </div>
       )}

@@ -22,12 +22,12 @@
   --radius-none: 0px;
 
   /* Échelle de type explicite & limitée */
-  --text-display: clamp(2.8rem, 8vw, 7rem);
+  --text-display: clamp(2.8rem, 6.5vw, 5.5rem);
   --text-display--line-height: 0.92;
   --text-display--letter-spacing: -0.01em;
   --text-display--font-weight: 900;
 
-  --text-h1: clamp(2rem, 5.2vw, 3.6rem);
+  --text-h1: clamp(2rem, 4.6vw, 3rem);
   --text-h1--line-height: 1.02;
   --text-h1--letter-spacing: -0.01em;
   --text-h1--font-weight: 900;

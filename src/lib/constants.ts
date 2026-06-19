@@ -87,6 +87,10 @@ export const NAV_LINKS = [
 
 export const RESERVATION_HREF = "/reservation";
 
+/** Réservation bassin privé — application externe Square. */
+export const SQUARE_BOOKING_URL =
+  "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LJ3931E19TX0B/classes?buttonTextColor=ffffff&color=000000&referrer=so";
+
 /** Liens legacy (référence — remplacés par les flux natifs). */
 export const LEGACY = {
   square: null,

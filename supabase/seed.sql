@@ -6,9 +6,9 @@
 -- ── Équipe (ordre strict) ─────────────────────────────────────
 insert into public.team_members (slug, name, tagline, role, bio, services, whatsapp, display_order, is_active)
 values
-  ('emma', 'Emma', 'Celle qui a tout imaginé.', 'Fondatrice · Kinésiologue certifiée',
-   'Kinésiologue certifiée, maître-nageuse et ancienne sauveteuse à Anglet. Fondatrice de Natation Côte Basque, elle a réuni cette équipe pour proposer une vision moderne et complète de l''apprentissage : plus humaine, plus adaptée, accessible à tous.',
-   '{kine,bassin}', null, 1, true),
+  ('emma', 'Emma', 'Celle qui a tout imaginé.', 'Fondatrice · Organisation',
+   'Fondatrice de Natation Côte Basque, elle a réuni cette équipe pour proposer une vision moderne et complète de l''apprentissage : plus humaine, plus adaptée, accessible à tous. Aujourd''hui, elle est responsable de l''organisation du collectif.',
+   '{}', null, 1, true),
   ('elea', 'Eléa', 'Celle qui rend tout simple.', 'Secrétariat · Coordination',
    'Eléa orchestre toute l''organisation du collectif : planning, réservations, annulations, suivi des cours. Toujours disponible et réactive, c''est elle qui fait le lien entre les élèves et les professeures — et qui permet à toute l''équipe d''avancer ensemble.',
    '{}', null, 2, true),
