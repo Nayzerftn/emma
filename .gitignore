@@ -43,3 +43,6 @@ next-env.d.ts
 # playwright
 /test-results/
 /playwright-report/
+
+# état local du seed E2E
+scripts/.e2e-seed-ids.json
