@@ -26,8 +26,24 @@ export function LenisProvider() {
     };
     rafId = requestAnimationFrame(raf);
 
+    // Lenis détourne le scroll : on gère nous-mêmes les ancres internes (#…),
+    // sinon les liens d'ancrage ne défilent pas. Offset = hauteur du masthead.
+    const onAnchorClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement | null)?.closest('a[href^="#"]');
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target as HTMLElement, { offset: -88 });
+      window.history.pushState(null, "", href);
+    };
+    document.addEventListener("click", onAnchorClick);
+
     return () => {
       cancelAnimationFrame(rafId);
+      document.removeEventListener("click", onAnchorClick);
       lenis.destroy();
     };
   }, []);
