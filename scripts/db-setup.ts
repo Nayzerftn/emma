@@ -31,6 +31,7 @@ const FILES = [
   "supabase/migrations/0001_schema.sql",
   "supabase/migrations/0002_rls.sql",
   "supabase/migrations/0003_platform.sql",
+  "supabase/migrations/0004_lessons_invoice_link.sql",
   "supabase/seed.sql",
 ];
 

@@ -181,6 +181,7 @@ export type LessonRow = {
   price_cents: number;
   payout_cents: number;
   status: LessonStatus;
+  invoice_id: string | null;
   created_at: string;
 };
 

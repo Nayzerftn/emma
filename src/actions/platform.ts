@@ -279,8 +279,9 @@ export async function generateInvoice(input: {
 
   let q = db
     .from("lessons")
-    .select("duration_min,status,starts_at")
-    .eq("client_id", input.clientId);
+    .select("id,duration_min,status,starts_at")
+    .eq("client_id", input.clientId)
+    .is("invoice_id", null); // anti-double-facturation : seulement les cours non encore facturés
   if (input.fromISO) q = q.gte("starts_at", input.fromISO);
   if (input.toISO) q = q.lte("starts_at", input.toISO);
   const { data: lessons } = await q;
@@ -308,6 +309,16 @@ export async function generateInvoice(input: {
     .select("id")
     .single();
   if (insErr || !invoice) return { ok: false, message: insErr?.message ?? "Échec." };
+
+  // 1b) Rattacher les cours facturés à cette facture (empêche tout re-comptage).
+  const { error: linkErr } = await db
+    .from("lessons")
+    .update({ invoice_id: invoice.id })
+    .in(
+      "id",
+      chargeable.map((l) => l.id),
+    );
+  if (linkErr) console.error("[invoice:link-lessons]", linkErr);
 
   // 2) Lien de paiement Stripe (si configuré).
   let stripeUrl: string | null = null;
