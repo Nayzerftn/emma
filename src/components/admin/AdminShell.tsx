@@ -3,8 +3,12 @@ import { SignOutButton } from "./SignOutButton";
 
 const NAV = [
   { href: "/admin", label: "Tableau de bord" },
+  { href: "/admin/demandes", label: "Demandes" },
+  { href: "/admin/planning-domicile", label: "Planning domicile" },
+  { href: "/admin/familles", label: "Familles" },
+  { href: "/admin/professeures", label: "Professeures" },
   { href: "/admin/reservations", label: "Réservations" },
-  { href: "/admin/planning", label: "Planning" },
+  { href: "/admin/planning", label: "Planning bassin" },
   { href: "/admin/leads", label: "Leads" },
   { href: "/admin/contenu", label: "Contenu" },
   { href: "/admin/equipe", label: "Équipe" },

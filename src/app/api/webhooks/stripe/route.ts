@@ -49,6 +49,16 @@ export async function POST(request: Request) {
       event.type === "checkout.session.expired"
     ) {
       const session = event.data.object as Stripe.Checkout.Session;
+
+      // Facture plateforme payée → marquer la facture comme réglée.
+      const invoiceId = session.metadata?.invoice_id;
+      if (invoiceId) {
+        if (event.type === "checkout.session.completed") {
+          await supabase.from("invoices").update({ status: "paid" }).eq("id", invoiceId);
+        }
+        return new Response("OK", { status: 200 });
+      }
+
       const bookingId = session.metadata?.booking_id;
       const slotId = session.metadata?.slot_id;
       if (!bookingId || !slotId) return new Response("OK", { status: 200 });

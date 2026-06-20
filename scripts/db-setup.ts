@@ -30,6 +30,7 @@ function connectionString(): string {
 const FILES = [
   "supabase/migrations/0001_schema.sql",
   "supabase/migrations/0002_rls.sql",
+  "supabase/migrations/0003_platform.sql",
   "supabase/seed.sql",
 ];
 

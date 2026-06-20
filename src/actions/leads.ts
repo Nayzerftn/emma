@@ -3,10 +3,41 @@
 import { headers } from "next/headers";
 import { env, hasSupabaseAdmin } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { leadSchema } from "@/lib/validation/lead";
+import { leadSchema, type LeadInput } from "@/lib/validation/lead";
 import { sendEmail, leadAdminEmail, leadCustomerEmail } from "@/lib/email";
+import { ingestLessonRequest, type IntakePayload } from "@/lib/platform/intake";
 
 export type LeadResult = { ok: boolean; message: string };
+
+/** Convertit un lead du site en demande opérationnelle (lesson_request). */
+function leadToIntake(data: LeadInput): IntakePayload {
+  const address = [data.address, data.city].filter(Boolean).join(", ") || null;
+  const message = [
+    data.message || null,
+    data.groupSize ? `Effectif : ${data.groupSize}` : null,
+  ]
+    .filter(Boolean)
+    .join(" — ") || null;
+  return {
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    type: data.type,
+    zone: null, // secteur A-J attribué par Eléa au matching
+    address,
+    student_name: null,
+    student_age: null,
+    student_level: data.level || null,
+    objective: null,
+    weeks: null,
+    slots_wanted: data.availability || null,
+    frequency: null,
+    duration_min: 30,
+    nb_courses: null,
+    preferred_teacher: null,
+    message,
+  };
+}
 
 // Rate-limit best-effort en mémoire (anti-spam basique).
 const hits = new Map<string, number[]>();
@@ -68,6 +99,14 @@ export async function submitLead(
         ok: false,
         message: "Une erreur est survenue. Réessayez ou écrivez-nous sur WhatsApp.",
       };
+    }
+
+    // Alimente aussi le pipeline opérationnel (espace gestion → Demandes).
+    // Best-effort : ne bloque pas l'utilisateur si l'insertion échoue.
+    try {
+      await ingestLessonRequest(leadToIntake(data), "site");
+    } catch (e) {
+      console.error("[lead:lesson-request]", e);
     }
   }
 

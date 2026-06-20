@@ -17,9 +17,14 @@ export const env = {
   resendApiKey: process.env.RESEND_API_KEY ?? "",
   emailFrom: process.env.EMAIL_FROM ?? "Natation Côte Basque <onboarding@resend.dev>",
   adminEmail: process.env.ADMIN_NOTIFICATION_EMAIL ?? "",
+  // Jeton partagé pour l'ingestion Google Form (Apps Script → /api/intake/google-form).
+  intakeToken: process.env.INTAKE_TOKEN ?? "",
+  // Secret des tâches planifiées (Vercel Cron → /api/cron/*).
+  cronSecret: process.env.CRON_SECRET ?? "",
 } as const;
 
 export const hasSupabase = Boolean(env.supabaseUrl && env.supabaseAnonKey);
 export const hasSupabaseAdmin = Boolean(env.supabaseUrl && env.supabaseServiceRoleKey);
 export const hasStripe = Boolean(env.stripeSecretKey);
 export const hasResend = Boolean(env.resendApiKey);
+export const hasIntakeToken = Boolean(env.intakeToken);

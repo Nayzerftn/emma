@@ -100,3 +100,68 @@ export function bookingAdminEmail(input: {
      <p><strong>Montant :</strong> ${input.amount}</p>`,
   );
 }
+
+/* ── Plateforme opérationnelle ─────────────────────────────── */
+export function proposalCustomerEmail(input: {
+  clientName: string;
+  teacherName: string;
+  type: "domicile" | "ocean";
+}) {
+  const label = input.type === "ocean" ? "initiation océan" : "cours à domicile";
+  return wrap(
+    "Votre professeure",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Pour votre demande de ${label}, nous vous proposons <strong>${input.teacherName}</strong>.</p>
+     <p>Elle vous contactera très vite pour caler les créneaux. À très vite !</p>
+     <p>L'équipe Natation Côte Basque</p>`,
+  );
+}
+
+export function invoiceCustomerEmail(input: {
+  clientName: string;
+  total: string;
+  url?: string | null;
+  lines: { label: string; amount_cents: number }[];
+}) {
+  const rows = input.lines
+    .map(
+      (l) =>
+        `<tr><td style="padding:4px 0">${l.label}</td><td style="padding:4px 0;text-align:right">${(
+          l.amount_cents / 100
+        ).toFixed(2)} €</td></tr>`,
+    )
+    .join("");
+  return wrap(
+    "Votre facture",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Voici le récapitulatif de vos cours :</p>
+     <table style="width:100%;border-collapse:collapse;font-size:14px">${rows}
+       <tr><td style="padding:8px 0;border-top:1px solid #e7e5e0"><strong>Total</strong></td>
+       <td style="padding:8px 0;border-top:1px solid #e7e5e0;text-align:right"><strong>${input.total}</strong></td></tr>
+     </table>
+     ${
+       input.url
+         ? `<p style="margin-top:20px"><a href="${input.url}" style="background:#111;color:#fff;padding:12px 20px;text-decoration:none;display:inline-block">Régler en ligne</a></p>`
+         : ""
+     }
+     <p>Merci de votre confiance,<br/>L'équipe Natation Côte Basque</p>`,
+  );
+}
+
+export function invoiceReminderEmail(input: {
+  clientName: string;
+  total: string;
+  url?: string | null;
+}) {
+  return wrap(
+    "Rappel — facture en attente",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Petit rappel concernant votre facture de <strong>${input.total}</strong>, encore en attente de règlement.</p>
+     ${
+       input.url
+         ? `<p><a href="${input.url}" style="background:#111;color:#fff;padding:12px 20px;text-decoration:none;display:inline-block">Régler maintenant</a></p>`
+         : ""
+     }
+     <p>Merci !<br/>L'équipe Natation Côte Basque</p>`,
+  );
+}

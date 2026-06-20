@@ -109,6 +109,94 @@ export type FaqItemRow = {
 export type AdminRow = { id: string; email: string; created_at: string };
 export type StripeEventRow = { id: string; type: string; received_at: string };
 
+/* ── Plateforme opérationnelle (domicile / océan) ── */
+export type LessonDuration = 30 | 60;
+export type RequestStatus =
+  | "new"
+  | "matching"
+  | "proposed"
+  | "confirmed"
+  | "to_retreat"
+  | "lost";
+export type LessonStatus = "scheduled" | "done" | "cancelled" | "cancelled_late";
+export type InvoiceStatus = "pending" | "paid" | "late";
+
+export type TeacherSettingsRow = {
+  teacher_id: string;
+  zones: string[];
+  max_per_day: number;
+  payout_30_cents: number;
+  payout_60_cents: number;
+  availability: {
+    base: { weekday: number; parts: string[] }[];
+    exceptions: { date: string; off?: boolean }[];
+  };
+  updated_at: string;
+};
+
+export type ClientRow = {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  created_at: string;
+};
+
+export type LessonRequestRow = {
+  id: string;
+  client_id: string | null;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  type: LeadType;
+  zone: string | null;
+  address: string | null;
+  student_name: string | null;
+  student_age: number | null;
+  student_level: string | null;
+  objective: string | null;
+  weeks: string | null;
+  slots_wanted: string | null;
+  frequency: string | null;
+  duration_min: LessonDuration;
+  nb_courses: number | null;
+  preferred_teacher_id: string | null;
+  message: string | null;
+  source: "site" | "google_form" | "manual";
+  status: RequestStatus;
+  matched_teacher_id: string | null;
+  created_at: string;
+};
+
+export type LessonRow = {
+  id: string;
+  request_id: string | null;
+  client_id: string | null;
+  teacher_id: string;
+  student_name: string | null;
+  starts_at: string;
+  duration_min: LessonDuration;
+  zone: string | null;
+  address: string | null;
+  price_cents: number;
+  payout_cents: number;
+  status: LessonStatus;
+  created_at: string;
+};
+
+export type InvoiceLine = { label: string; amount_cents: number };
+export type InvoiceRow = {
+  id: string;
+  client_id: string | null;
+  client_name: string;
+  period_label: string | null;
+  lines: InvoiceLine[];
+  total_cents: number;
+  status: InvoiceStatus;
+  stripe_url: string | null;
+  created_at: string;
+};
+
 type TableShape<Row, Insert = Partial<Row>, Update = Partial<Row>> = {
   Row: Row;
   Insert: Insert;
@@ -128,6 +216,11 @@ export type Database = {
       faq_items: TableShape<FaqItemRow>;
       admins: TableShape<AdminRow>;
       stripe_events: TableShape<StripeEventRow>;
+      teacher_settings: TableShape<TeacherSettingsRow>;
+      clients: TableShape<ClientRow>;
+      lesson_requests: TableShape<LessonRequestRow>;
+      lessons: TableShape<LessonRow>;
+      invoices: TableShape<InvoiceRow>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
