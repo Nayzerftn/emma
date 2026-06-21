@@ -77,15 +77,16 @@ export function StatsBand({ items }: { items: readonly { head: string; sub: stri
     <section className="section-ink">
       <div className="shell grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {items.map((s, i) => (
-          <div
+          <Reveal
             key={i}
+            delay={i * 0.08}
             className="border-paper/15 flex flex-col gap-2 border-b py-8 sm:border-b-0 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0"
           >
             <p className="font-display text-xl font-black uppercase tracking-[-0.01em] md:text-2xl">
               {s.head}
             </p>
             <p className="text-paper/65 text-small">{s.sub}</p>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -137,8 +138,10 @@ export function IllustratedQuote({ section }: { section: IllustratedSection }) {
         sizes="100vw"
       />
       <div className="shell pointer-events-none absolute inset-0 z-20 flex flex-col justify-end pb-12 md:pb-16">
-        <DisplayTitle lines={section.quoteLines} className="text-display text-paper" />
-        <p className="eyebrow text-paper/85 mt-4">{section.meta}</p>
+        <Reveal>
+          <DisplayTitle lines={section.quoteLines} className="text-display text-paper" />
+          <p className="eyebrow text-paper/85 mt-4">{section.meta}</p>
+        </Reveal>
       </div>
     </section>
   );
@@ -180,11 +183,13 @@ export function TrustBand({ items }: { items: readonly string[] }) {
     <section className="shell py-16 md:py-20">
       <ul className="grid gap-x-12 gap-y-6 md:grid-cols-2">
         {items.map((t, i) => (
-          <li key={i} className="border-filet flex items-start gap-4 border-t pt-6">
-            <span className="text-ink mt-0.5">
-              <CheckMark />
-            </span>
-            <span className="text-ink/90 leading-relaxed">{t}</span>
+          <li key={i} className="border-filet border-t pt-6">
+            <Reveal delay={i * 0.06} className="flex items-start gap-4">
+              <span className="text-ink mt-0.5">
+                <CheckMark />
+              </span>
+              <span className="text-ink/90 leading-relaxed">{t}</span>
+            </Reveal>
           </li>
         ))}
       </ul>
@@ -225,7 +230,9 @@ export function Testimonials({
 }) {
   return (
     <section className="shell py-20 md:py-28">
-      <Eyebrow>Témoignages</Eyebrow>
+      <Reveal>
+        <Eyebrow>Témoignages</Eyebrow>
+      </Reveal>
       <div className="mt-10 grid gap-12 md:grid-cols-3 md:gap-10">
         {items.map((t, i) => (
           <Reveal key={i} delay={i * 0.08}>
@@ -250,18 +257,17 @@ export function NumberedList({
 }) {
   return (
     <ol className="border-filet border-t">
-      {items.map((it) => (
-        <li
-          key={it.n}
-          className="border-filet grid gap-4 border-b py-8 md:grid-cols-[auto_1fr] md:gap-12"
-        >
-          <span className="seq-number text-meta/40 text-5xl md:text-6xl">{it.n}</span>
-          <div>
-            <h3 className="font-display text-lg font-bold tracking-[-0.01em] md:text-xl">
-              {it.title}
-            </h3>
-            <p className="measure text-meta mt-3 leading-relaxed">{it.text}</p>
-          </div>
+      {items.map((it, i) => (
+        <li key={it.n} className="border-filet border-b py-8">
+          <Reveal delay={i * 0.05} className="grid gap-4 md:grid-cols-[auto_1fr] md:gap-12">
+            <span className="seq-number text-meta/40 text-5xl md:text-6xl">{it.n}</span>
+            <div>
+              <h3 className="font-display text-lg font-bold tracking-[-0.01em] md:text-xl">
+                {it.title}
+              </h3>
+              <p className="measure text-meta mt-3 leading-relaxed">{it.text}</p>
+            </div>
+          </Reveal>
         </li>
       ))}
     </ol>
@@ -278,10 +284,12 @@ export function FeatureList({
     <ul className="border-filet border-t">
       {items.map((it, i) => (
         <li key={i} className="border-filet border-b py-6">
-          <h3 className="font-display text-lg font-bold tracking-[-0.01em] md:text-xl">
-            {it.title}
-          </h3>
-          <p className="measure text-meta mt-2 leading-relaxed">{it.text}</p>
+          <Reveal delay={i * 0.05}>
+            <h3 className="font-display text-lg font-bold tracking-[-0.01em] md:text-xl">
+              {it.title}
+            </h3>
+            <p className="measure text-meta mt-2 leading-relaxed">{it.text}</p>
+          </Reveal>
         </li>
       ))}
     </ul>
@@ -301,11 +309,13 @@ export function FaqSection({
   return (
     <section className="shell py-20 md:py-28">
       <div className="grid gap-10 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
-        <div>
+        <Reveal>
           <Eyebrow>{eyebrow}</Eyebrow>
           {titleLines && <DisplayTitle lines={titleLines} className="text-h2 mt-3" />}
-        </div>
-        <FaqAccordion items={items} />
+        </Reveal>
+        <Reveal delay={0.1}>
+          <FaqAccordion items={items} />
+        </Reveal>
       </div>
     </section>
   );

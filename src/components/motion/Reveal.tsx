@@ -8,10 +8,12 @@ type RevealProps = {
   className?: string;
   delay?: number;
   y?: number;
+  /** Flou d'apparition en px (0 pour désactiver). Touche premium « clean ». */
+  blur?: number;
 };
 
-/** Révélation au scroll : fade + translateY léger. Respecte prefers-reduced-motion. */
-export function Reveal({ children, className, delay = 0, y = 26 }: RevealProps) {
+/** Révélation au scroll : fade + translateY + léger flou. Respecte prefers-reduced-motion. */
+export function Reveal({ children, className, delay = 0, y = 28, blur = 6 }: RevealProps) {
   const reduce = useReducedMotion();
 
   if (reduce) {
@@ -21,10 +23,10 @@ export function Reveal({ children, className, delay = 0, y = 26 }: RevealProps) 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y, filter: blur ? `blur(${blur}px)` : "blur(0px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>

@@ -2,11 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "motion/react";
 import { HERO_VIDEO_URL } from "@/lib/constants";
 import { PHOTOS } from "@/lib/photos";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/motion/Magnetic";
-import { DisplayTitle, Eyebrow } from "@/components/site/Typography";
+import { Eyebrow } from "@/components/site/Typography";
 
 /** Hero accueil : vidéo plein écran (autoplay/muted/loop/playsinline), poster Oïana. */
 export function HeroVideo({
@@ -23,6 +24,18 @@ export function HeroVideo({
   ctaHref: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reduce = useReducedMotion();
+
+  // Entrée orchestrée au chargement : eyebrow → lignes du titre → sous-titre → CTA.
+  const rise = (i: number) => ({
+    initial: reduce ? false : { opacity: 0, y: 28, filter: "blur(6px)" },
+    animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+    transition: {
+      duration: reduce ? 0 : 0.85,
+      delay: reduce ? 0 : 0.25 + i * 0.1,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  });
 
   // Autoplay fiable : on force la propriété DOM `muted` (quirk React) puis play().
   useEffect(() => {
@@ -61,22 +74,29 @@ export function HeroVideo({
       />
 
       <div className="shell relative z-10 flex h-full flex-col justify-end pb-16 md:pb-24">
-        <Eyebrow className="text-paper/85">{eyebrow}</Eyebrow>
-        <DisplayTitle
-          as="h1"
-          lines={titleLines}
-          className="text-display text-paper mt-4 max-w-[20ch]"
-        />
-        <p className="text-paper/90 measure mt-6 text-base leading-relaxed md:text-lg">
+        <motion.div {...rise(0)}>
+          <Eyebrow className="text-paper/85">{eyebrow}</Eyebrow>
+        </motion.div>
+        <h1 className="display text-display text-paper mt-4 max-w-[20ch]">
+          {titleLines.map((line, i) => (
+            <motion.span key={i} className="block" {...rise(1 + i)}>
+              {line}
+            </motion.span>
+          ))}
+        </h1>
+        <motion.p
+          className="text-paper/90 measure mt-6 text-base leading-relaxed md:text-lg"
+          {...rise(1 + titleLines.length)}
+        >
           {subtitle}
-        </p>
-        <div className="mt-8">
+        </motion.p>
+        <motion.div className="mt-8" {...rise(2 + titleLines.length)}>
           <Magnetic>
             <Button asChild variant="inverse" size="lg">
               <Link href={ctaHref}>{ctaLabel}</Link>
             </Button>
           </Magnetic>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
