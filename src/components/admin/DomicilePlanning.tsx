@@ -277,6 +277,7 @@ export function DomicilePlanning({
                   return (
                     <article
                       key={l.id}
+                      data-lesson-id={l.id}
                       className={`border p-4 ${
                         conflictIds.has(l.id) ? "border-ink bg-sand" : "border-filet"
                       } ${cancelled ? "opacity-60" : ""}`}
