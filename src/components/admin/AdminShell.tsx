@@ -1,19 +1,6 @@
 import Link from "next/link";
 import { SignOutButton } from "./SignOutButton";
-
-const NAV = [
-  { href: "/admin", label: "Tableau de bord" },
-  { href: "/admin/demandes", label: "Demandes" },
-  { href: "/admin/planning-domicile", label: "Planning domicile" },
-  { href: "/admin/familles", label: "Familles" },
-  { href: "/admin/professeures", label: "Professeures" },
-  { href: "/admin/reservations", label: "Réservations" },
-  { href: "/admin/planning", label: "Planning bassin" },
-  { href: "/admin/leads", label: "Leads" },
-  { href: "/admin/contenu", label: "Contenu" },
-  { href: "/admin/equipe", label: "Équipe" },
-  { href: "/admin/medias", label: "Médias" },
-];
+import { AdminNav } from "./AdminNav";
 
 export function AdminShell({
   children,
@@ -37,19 +24,7 @@ export function AdminShell({
             <SignOutButton />
           </div>
         </div>
-        <nav className="border-filet border-t">
-          <div className="shell no-scrollbar flex gap-6 overflow-x-auto py-3">
-            {NAV.map((n) => (
-              <Link
-                key={n.href}
-                href={n.href}
-                className="eyebrow text-ink whitespace-nowrap hover:opacity-60"
-              >
-                {n.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
+        <AdminNav />
       </header>
       <main className="shell py-10">{children}</main>
     </div>
