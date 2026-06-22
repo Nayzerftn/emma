@@ -1,6 +1,8 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { AdminHeading } from "@/components/admin/AdminShell";
-import { DomicilePlanning, type PlanningLesson } from "@/components/admin/DomicilePlanning";
+import type { PlanningLesson } from "@/components/admin/DomicilePlanning";
+import { PlanningViews } from "@/components/admin/PlanningViews";
+import { RedistributeBulk } from "@/components/admin/RedistributeBulk";
 
 export default async function AdminPlanningDomicile() {
   const supabase = await createSupabaseServerClient();
@@ -44,7 +46,10 @@ export default async function AdminPlanningDomicile() {
         title="Planning domicile & océan"
         description="Vue d'ensemble (Eléa) et par professeure. Règle des 30 min de battement appliquée à la création."
       />
-      <DomicilePlanning
+      <div className="mb-6">
+        <RedistributeBulk teachers={(team ?? []).map((t) => ({ id: t.id, name: t.name }))} />
+      </div>
+      <PlanningViews
         lessons={items}
         teachers={(team ?? []).map((t) => ({ id: t.id, name: t.name }))}
         clients={(clients ?? []).map((c) => ({ id: c.id, name: c.name }))}

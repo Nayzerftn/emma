@@ -25,7 +25,7 @@ import {
   buildInvoiceLines,
   isChargeable,
 } from "@/lib/platform/billing";
-import { canSchedule, type PlanSlot } from "@/lib/platform/planning";
+import { canSchedule, eachDateParis, type PlanSlot } from "@/lib/platform/planning";
 import { proposeSlots, toParis } from "@/lib/platform/slots";
 import type {
   RequestStatus,
@@ -472,6 +472,182 @@ export async function deleteLesson(id: string): Promise<ActionResult> {
   revalidatePath("/admin/planning-domicile");
   revalidatePath("/admin/familles");
   return { ok: true, message: "Cours supprimé." };
+}
+
+/** Déplace un cours (glisser-déposer du planning) — vérifie le battement. */
+export async function moveLesson(id: string, newStartsAt: string): Promise<ActionResult> {
+  const db = await guard();
+  if (!db) return DENIED;
+  const { data: lesson } = await db
+    .from("lessons")
+    .select("teacher_id,duration_min")
+    .eq("id", id)
+    .single();
+  if (!lesson) return { ok: false, message: "Cours introuvable." };
+  if (!(await battementOk(db, lesson.teacher_id, newStartsAt, lesson.duration_min, id))) {
+    return { ok: false, message: "Conflit : moins de 30 min de battement avec un autre cours." };
+  }
+  const { error } = await db.from("lessons").update({ starts_at: newStartsAt }).eq("id", id);
+  if (error) return { ok: false, message: error.message };
+  revalidatePath("/admin/planning-domicile");
+  return { ok: true, message: "Cours déplacé." };
+}
+
+/**
+ * Redistribution en masse (prof indisponible sur une période) : réaffecte tous
+ * les cours planifiés d'une professeure vers une autre, en respectant le battement
+ * de la remplaçante. Recalcule la paie au taux de la remplaçante, peut marquer la
+ * prof absente indisponible (exceptions), et notifie (remplaçante + Eléa).
+ */
+export async function reassignLessons(input: {
+  fromTeacherId: string;
+  toTeacherId: string;
+  fromISO: string;
+  toISO: string;
+  markUnavailable?: boolean;
+}): Promise<ActionResult & { moved?: number; skipped?: number }> {
+  const db = await guard();
+  if (!db) return DENIED;
+  if (input.fromTeacherId === input.toTeacherId)
+    return { ok: false, message: "Choisissez deux professeures différentes." };
+  if (new Date(input.fromISO).getTime() > new Date(input.toISO).getTime())
+    return { ok: false, message: "Période invalide (début après fin)." };
+
+  const { data: pair } = await db
+    .from("team_members")
+    .select("id,name,email,is_active")
+    .in("id", [input.fromTeacherId, input.toTeacherId]);
+  const from = pair?.find((t) => t.id === input.fromTeacherId);
+  const to = pair?.find((t) => t.id === input.toTeacherId);
+  if (!from || !to) return { ok: false, message: "Professeure introuvable." };
+  if (!to.is_active) return { ok: false, message: "La remplaçante est inactive." };
+
+  const { data: lessons } = await db
+    .from("lessons")
+    .select("id,starts_at,duration_min,student_name,zone,address,client_id")
+    .eq("teacher_id", input.fromTeacherId)
+    .eq("status", "scheduled")
+    .gte("starts_at", input.fromISO)
+    .lte("starts_at", input.toISO)
+    .order("starts_at");
+  if (!lessons || lessons.length === 0)
+    return { ok: false, message: `Aucun cours planifié pour ${from.name} sur cette période.` };
+
+  // Taux de paie de la remplaçante (sinon barème par défaut).
+  const { data: toSettings } = await db
+    .from("teacher_settings")
+    .select("payout_30_cents,payout_60_cents")
+    .eq("teacher_id", input.toTeacherId)
+    .maybeSingle();
+  const rate = (d: LessonDuration) =>
+    d === 30
+      ? (toSettings?.payout_30_cents ?? teacherPayoutCents(30))
+      : (toSettings?.payout_60_cents ?? teacherPayoutCents(60));
+
+  const moved: TeacherLessonLine[] = [];
+  const skipped: string[] = [];
+  const phoneByClient = new Map<string, string | null>();
+
+  for (const l of lessons) {
+    // Battement vérifié contre le planning de la remplaçante (cumulatif :
+    // les cours déjà réaffectés comptent puisqu'on relit la base à chaque tour).
+    if (!(await battementOk(db, input.toTeacherId, l.starts_at, l.duration_min))) {
+      skipped.push(formatWhenParis(l.starts_at));
+      continue;
+    }
+    const { error } = await db
+      .from("lessons")
+      .update({ teacher_id: input.toTeacherId, payout_cents: rate(l.duration_min) })
+      .eq("id", l.id);
+    if (error) {
+      skipped.push(formatWhenParis(l.starts_at));
+      continue;
+    }
+    let phone: string | null = null;
+    if (l.client_id) {
+      if (!phoneByClient.has(l.client_id)) {
+        const { data: c } = await db
+          .from("clients")
+          .select("phone")
+          .eq("id", l.client_id)
+          .single();
+        phoneByClient.set(l.client_id, c?.phone ?? null);
+      }
+      phone = phoneByClient.get(l.client_id) ?? null;
+    }
+    moved.push({
+      when: formatWhenParis(l.starts_at),
+      duration: l.duration_min,
+      student: l.student_name,
+      zone: l.zone,
+      address: l.address,
+      phone,
+    });
+  }
+
+  // Marquer la prof absente indisponible sur la période (exceptions « off »).
+  if (input.markUnavailable) {
+    const dates = eachDateParis(input.fromISO, input.toISO);
+    const { data: s } = await db
+      .from("teacher_settings")
+      .select("availability")
+      .eq("teacher_id", input.fromTeacherId)
+      .maybeSingle();
+    type Availability = {
+      base: { weekday: number; windows: { start: string; end: string }[] }[];
+      exceptions: { date: string; off?: boolean }[];
+    };
+    const avail: Availability = (s?.availability as Availability | null) ?? {
+      base: [],
+      exceptions: [],
+    };
+    const existing = new Set((avail.exceptions ?? []).map((e) => e.date));
+    const merged = [
+      ...(avail.exceptions ?? []),
+      ...dates.filter((d) => !existing.has(d)).map((date) => ({ date, off: true })),
+    ];
+    const nextAvail: Availability = { base: avail.base ?? [], exceptions: merged };
+    if (s) {
+      await db
+        .from("teacher_settings")
+        .update({ availability: nextAvail, updated_at: new Date().toISOString() })
+        .eq("teacher_id", input.fromTeacherId);
+    } else {
+      await db
+        .from("teacher_settings")
+        .insert({ teacher_id: input.fromTeacherId, availability: nextAvail });
+    }
+  }
+
+  // Notifications : la remplaçante reçoit ses nouveaux cours, Eléa un récapitulatif.
+  if (moved.length > 0) await notifyTeacherNew(db, input.toTeacherId, moved);
+  if (env.adminEmail) {
+    const lines = [
+      `${moved.length} cours réaffecté(s) de ${from.name} vers ${to.name}${input.markUnavailable ? ` (${from.name} marquée indisponible sur la période)` : ""}.`,
+    ];
+    if (skipped.length)
+      lines.push(
+        `⚠ ${skipped.length} cours non réaffecté(s) (conflit de battement chez ${to.name}) — à arbitrer : ${skipped.join(", ")}.`,
+      );
+    await sendEmail({
+      to: env.adminEmail,
+      subject: "Redistribution de cours",
+      html: adminAlertEmail("Redistribution de cours", lines),
+    }).catch((e) => console.error("[reassign:alert]", e));
+  }
+
+  revalidatePath("/admin/planning-domicile");
+  revalidatePath("/admin/professeures");
+  revalidatePath("/admin/familles");
+  return {
+    ok: moved.length > 0,
+    message:
+      moved.length > 0
+        ? `${moved.length} cours réaffecté(s) à ${to.name}.${skipped.length ? ` ${skipped.length} ignoré(s) (conflit) — à arbitrer.` : ""}`
+        : `Aucun cours réaffecté : ${skipped.length} conflit(s) de battement chez ${to.name}.`,
+    moved: moved.length,
+    skipped: skipped.length,
+  };
 }
 
 /* ── Réglages professeures (teacher_settings) ──────────────── */

@@ -40,6 +40,13 @@ describe("scoreTeacher", () => {
     expect(adj.score).toBe(5);
     expect(far.score).toBe(0);
   });
+  it("optimisation trajets : déjà présente dans le secteur = +5", () => {
+    const req: MatchRequest = { type: "domicile", zone: "C" };
+    const sansTrajet = scoreTeacher(req, t({ zones: [], hasAvailability: false, weekLoad: 9, services: [], activeZones: [] }));
+    const avecTrajet = scoreTeacher(req, t({ zones: [], hasAvailability: false, weekLoad: 9, services: [], activeZones: ["C"] }));
+    expect(avecTrajet.score - sansTrajet.score).toBe(5);
+    expect(avecTrajet.reasons.some((r) => r.includes("secteur"))).toBe(true);
+  });
   it("disponibilités déclarées = +30", () => {
     const req: MatchRequest = { type: "domicile" };
     const dispo = scoreTeacher(req, t({ hasAvailability: true, weekLoad: 9, zones: [], services: [] }));

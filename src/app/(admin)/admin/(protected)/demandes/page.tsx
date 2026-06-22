@@ -22,7 +22,7 @@ export default async function AdminDemandes() {
       supabase.from("teacher_settings").select("*"),
       supabase
         .from("lessons")
-        .select("teacher_id,status")
+        .select("teacher_id,status,zone")
         .gte("starts_at", weekStart)
         .lte("starts_at", weekEnd)
         .in("status", ["scheduled", "done"]),
@@ -32,8 +32,14 @@ export default async function AdminDemandes() {
     (settings ?? []).map((s) => [s.teacher_id, s]),
   );
   const loadByTeacher = new Map<string, number>();
-  for (const l of weekLessons ?? [])
+  const zonesByTeacher = new Map<string, Set<string>>(); // secteurs déjà couverts (trajets)
+  for (const l of weekLessons ?? []) {
     loadByTeacher.set(l.teacher_id, (loadByTeacher.get(l.teacher_id) ?? 0) + 1);
+    if (l.zone) {
+      if (!zonesByTeacher.has(l.teacher_id)) zonesByTeacher.set(l.teacher_id, new Set());
+      zonesByTeacher.get(l.teacher_id)!.add(l.zone);
+    }
+  }
 
   const pool: MatchTeacher[] = (team ?? []).map((t: TeamMemberRow) => {
     const s = settingsByTeacher.get(t.id);
@@ -45,6 +51,7 @@ export default async function AdminDemandes() {
       hasAvailability: (s?.availability?.base?.length ?? 0) > 0,
       weekLoad: loadByTeacher.get(t.id) ?? 0,
       isActive: t.is_active,
+      activeZones: [...(zonesByTeacher.get(t.id) ?? [])],
     };
   });
 

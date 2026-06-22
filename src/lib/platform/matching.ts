@@ -9,6 +9,7 @@
  *  - Disponibilités déclarées → +30
  *  - Spécialité correspondante (type de cours) → +15
  *  - Zone : même secteur → +10, secteur adjacent → +5
+ *  - Prof déjà présente dans ce secteur (optimisation trajets) → +5
  *  - Répartition équitable : moins chargée → jusqu'à +3
  *
  * NB : le matching fin créneau-par-créneau nécessite des créneaux structurés
@@ -25,6 +26,8 @@ export type MatchTeacher = {
   hasAvailability: boolean;
   weekLoad: number;
   isActive: boolean;
+  /** Secteurs où la prof a déjà des cours à venir (optimisation trajets). */
+  activeZones?: string[];
 };
 
 export type MatchRequest = {
@@ -58,6 +61,11 @@ export function scoreTeacher(req: MatchRequest, t: MatchTeacher): MatchResult {
     } else if (t.zones.some((z) => isAdjacent(z, req.zone as string))) {
       score += 5;
       reasons.push("Secteur adjacent (+5)");
+    }
+    // Optimisation trajets : déjà des cours dans ce secteur.
+    if (t.activeZones?.includes(req.zone)) {
+      score += 5;
+      reasons.push("Déjà présente dans ce secteur (+5)");
     }
   }
   const loadBonus = Math.max(0, 3 - t.weekLoad);
