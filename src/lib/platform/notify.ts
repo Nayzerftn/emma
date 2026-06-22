@@ -51,6 +51,19 @@ export function proposalMessage(input: {
   )}${who}, nous vous proposons ${input.teacherName}. Elle vous contactera pour caler les créneaux. On confirme ?`;
 }
 
+/** Message de proposition COMPLET avec les créneaux (WhatsApp semi-auto). */
+export function proposalWithSlotsMessage(input: {
+  clientName: string;
+  teacherName: string;
+  type: "domicile" | "ocean";
+  slots: string[]; // déjà formatés, ex. "lundi 6 juillet à 10h00"
+}): string {
+  const who = input.slots.length ? `\n\nCréneaux possibles :\n${input.slots.map((s, i) => `${i + 1}. ${s}`).join("\n")}` : "";
+  return `Bonjour ${input.clientName}, c'est l'équipe Natation Côte Basque 🏊\n\nPour votre ${typeLabel(
+    input.type,
+  )}, nous vous proposons ${input.teacherName}.${who}\n\nRépondez OUI pour valider, ou NON / MODIFIER si vous préférez d'autres créneaux. À très vite !`;
+}
+
 /** Message de relance de paiement (WhatsApp / email). */
 export function reminderMessage(input: {
   clientName: string;

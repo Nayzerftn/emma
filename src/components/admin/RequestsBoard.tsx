@@ -11,7 +11,9 @@ import {
   type NewLessonInput,
 } from "@/actions/platform";
 import { EmptyState } from "@/components/admin/AdminShell";
-import { waLink, proposalMessage } from "@/lib/platform/notify";
+import { waLink, proposalMessage, proposalWithSlotsMessage } from "@/lib/platform/notify";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import type { RequestStatus, LessonDuration, LeadType } from "@/lib/supabase/types";
 
 type Match = { id: string; name: string; score: number; reasons: string[] };
@@ -319,6 +321,30 @@ function RequestItem({ r, teachers }: { r: RequestCard; teachers: { id: string; 
                 >
                   Confirmer {rows.length} cours
                 </button>
+                {r.phone && (
+                  <a
+                    href={waLink(
+                      r.phone,
+                      proposalWithSlotsMessage({
+                        clientName: r.name,
+                        teacherName: proposedName,
+                        type: r.type,
+                        slots: rows
+                          .filter((row) => row.date && row.time)
+                          .map((row) =>
+                            format(new Date(`${row.date}T${row.time}`), "EEEE d MMMM 'à' HH'h'mm", {
+                              locale: fr,
+                            }),
+                          ),
+                      }),
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border-[#25D366] text-[#128C7E] hover:bg-[#25D366]/10 border px-3 py-1.5 text-[0.66rem] font-semibold uppercase tracking-[0.08em]"
+                  >
+                    📲 Envoyer la proposition WhatsApp
+                  </a>
+                )}
               </div>
             </div>
           )}
