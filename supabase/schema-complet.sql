@@ -396,3 +396,12 @@ alter table public.team_members
   add column if not exists email text;
 
 create index if not exists team_members_auth_idx on public.team_members (auth_user_id);
+
+
+-- ╔═══ 7. FACTURE PDF (Stripe Invoices) ═══╗
+-- ─────────────────────────────────────────────────────────────
+-- Facture PDF via Stripe Invoices : URL du PDF + id facture Stripe.
+-- Idempotent.
+-- ─────────────────────────────────────────────────────────────
+alter table public.invoices add column if not exists pdf_url text;
+alter table public.invoices add column if not exists stripe_invoice_id text;

@@ -9,6 +9,7 @@ const NAV = [
   { href: "/admin/demandes", label: "Demandes" },
   { href: "/admin/planning-domicile", label: "Planning domicile" },
   { href: "/admin/familles", label: "Familles" },
+  { href: "/admin/paie", label: "Paie" },
   { href: "/admin/professeures", label: "Professeures" },
   { href: "/admin/reservations", label: "Réservations" },
   { href: "/admin/planning", label: "Planning bassin" },

@@ -12,7 +12,9 @@ import {
 import { EmptyState } from "@/components/admin/AdminShell";
 import { waLink, reminderMessage } from "@/lib/platform/notify";
 import { formatEuros } from "@/lib/utils";
-import type { InvoiceStatus, InvoiceLine } from "@/lib/supabase/types";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import type { InvoiceStatus, InvoiceLine, LessonStatus, LessonDuration } from "@/lib/supabase/types";
 
 type FamilyInvoice = {
   id: string;
@@ -20,7 +22,16 @@ type FamilyInvoice = {
   totalCents: number;
   status: InvoiceStatus;
   stripeUrl: string | null;
+  pdfUrl: string | null;
   lines: InvoiceLine[];
+};
+
+type HistoryItem = {
+  startsAt: string;
+  teacher: string;
+  duration: LessonDuration;
+  status: LessonStatus;
+  invoiced: boolean;
 };
 
 export type FamilyCard = {
@@ -30,7 +41,15 @@ export type FamilyCard = {
   phone: string | null;
   chargeableCount: number;
   dueCents: number;
+  history: HistoryItem[];
   invoices: FamilyInvoice[];
+};
+
+const LESSON_STATUS: Record<LessonStatus, string> = {
+  scheduled: "Prévu",
+  done: "Effectué",
+  cancelled: "Annulé",
+  cancelled_late: "Annulé < 48h (dû)",
 };
 
 const INV_STATUS: Record<InvoiceStatus, string> = {
@@ -55,6 +74,7 @@ function FamilyItem({ f }: { f: FamilyCard }) {
   const [pending, startTransition] = useTransition();
   const [label, setLabel] = useState(monthLabel());
   const [scope, setScope] = useState<"all" | "month">("all");
+  const [histOpen, setHistOpen] = useState(false);
 
   function act(fn: () => Promise<{ ok: boolean; message?: string }>) {
     startTransition(async () => {
@@ -151,6 +171,16 @@ function FamilyItem({ f }: { f: FamilyCard }) {
                     Lien de paiement
                   </a>
                 )}
+                {inv.pdfUrl && (
+                  <a
+                    href={inv.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[0.72rem] underline-draw"
+                  >
+                    PDF
+                  </a>
+                )}
                 {f.phone && inv.status !== "paid" && (
                   <a
                     href={waLink(
@@ -196,6 +226,36 @@ function FamilyItem({ f }: { f: FamilyCard }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {f.history.length > 0 && (
+        <div className="border-filet mt-4 border-t pt-3">
+          <button
+            onClick={() => setHistOpen((v) => !v)}
+            className="eyebrow text-ink hover:opacity-60"
+          >
+            {histOpen ? "− Masquer l'historique" : `+ Historique (${f.history.length} cours)`}
+          </button>
+          {histOpen && (
+            <table className="mt-3 w-full text-sm">
+              <tbody>
+                {f.history.map((h, i) => (
+                  <tr key={i} className="border-filet border-b last:border-0">
+                    <td className="py-2 capitalize">
+                      {format(new Date(h.startsAt), "d MMM yyyy", { locale: fr })}
+                    </td>
+                    <td className="text-meta py-2">{h.teacher}</td>
+                    <td className="py-2">{h.duration === 60 ? "1 h" : "30 min"}</td>
+                    <td className="py-2 text-right">
+                      {LESSON_STATUS[h.status]}
+                      {h.invoiced ? " · facturé" : ""}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </article>

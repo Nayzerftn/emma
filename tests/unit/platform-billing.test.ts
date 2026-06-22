@@ -6,6 +6,7 @@ import {
   buildInvoiceLines,
   lessonPriceCents,
   teacherPayoutCents,
+  teacherPayout,
 } from "@/lib/platform/billing";
 import type { LessonDuration, LessonStatus } from "@/lib/supabase/types";
 
@@ -28,6 +29,18 @@ describe("règle d'annulation", () => {
     expect(isChargeable("cancelled_late")).toBe(true);
     expect(isChargeable("cancelled")).toBe(false);
     expect(isChargeable("scheduled")).toBe(false);
+  });
+});
+
+describe("paie professeure (montant à reverser)", () => {
+  it("taux par défaut : 6×30min + 2×1h = 230€", () => {
+    expect(teacherPayout(6, 2)).toBe(23000); // 6×2500 + 2×4000
+  });
+  it("respecte un taux personnalisé par prof", () => {
+    expect(teacherPayout(2, 1, 3000, 5000)).toBe(11000); // 2×30 + 1×50
+  });
+  it("aucun cours = 0", () => {
+    expect(teacherPayout(0, 0)).toBe(0);
   });
 });
 

@@ -198,6 +198,8 @@ export type InvoiceRow = {
   total_cents: number;
   status: InvoiceStatus;
   stripe_url: string | null;
+  pdf_url: string | null;
+  stripe_invoice_id: string | null;
   created_at: string;
 };
 

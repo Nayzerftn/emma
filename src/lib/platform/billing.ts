@@ -38,6 +38,19 @@ export function teacherPayoutTotalCents(lessons: Billable[]): number {
     .reduce((sum, l) => sum + teacherPayoutCents(l.duration_min), 0);
 }
 
+/**
+ * Montant à reverser à une professeure pour un nombre de cours donnés,
+ * selon SES taux (par défaut 25 €/30min, 40 €/1h). Tout en centimes.
+ */
+export function teacherPayout(
+  count30: number,
+  count60: number,
+  rate30Cents: number = TEACHER_PAYOUT_CENTS[30],
+  rate60Cents: number = TEACHER_PAYOUT_CENTS[60],
+): number {
+  return count30 * rate30Cents + count60 * rate60Cents;
+}
+
 /** Construit les lignes de facture regroupées par durée + cours annulés tardifs. */
 export function buildInvoiceLines(
   lessons: { duration_min: LessonDuration; status: LessonStatus }[],

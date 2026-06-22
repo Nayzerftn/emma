@@ -44,6 +44,16 @@ export async function POST(request: Request) {
   }
 
   try {
+    // Facture Stripe (Stripe Invoices) payée → marquer notre facture réglée.
+    if (event.type === "invoice.paid" || event.type === "invoice.payment_succeeded") {
+      const inv = event.data.object as Stripe.Invoice;
+      const ourId = inv.metadata?.invoice_id;
+      if (ourId) {
+        await supabase.from("invoices").update({ status: "paid" }).eq("id", ourId);
+      }
+      return new Response("OK", { status: 200 });
+    }
+
     if (
       event.type === "checkout.session.completed" ||
       event.type === "checkout.session.expired"

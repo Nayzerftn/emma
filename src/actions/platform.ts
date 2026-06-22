@@ -478,34 +478,50 @@ export async function generateInvoice(input: {
     );
   if (linkErr) console.error("[invoice:link-lessons]", linkErr);
 
-  // 2) Lien de paiement Stripe (si configuré).
+  // 2) Facture Stripe (PDF + lien de paiement) — nécessite Stripe + email client.
   let stripeUrl: string | null = null;
-  if (hasStripe) {
+  let pdfUrl: string | null = null;
+  if (hasStripe && client.email) {
     try {
       const stripe = getStripe();
-      const session = await stripe.checkout.sessions.create({
-        mode: "payment",
-        line_items: lines.map((l) => ({
-          price_data: {
-            currency: "eur",
-            product_data: { name: l.label },
-            unit_amount: l.amount_cents,
-          },
-          quantity: 1,
-        })),
-        metadata: { invoice_id: invoice.id },
-        customer_email: client.email ?? undefined,
-        success_url: `${env.siteUrl}/admin/familles?paid=1`,
-        cancel_url: `${env.siteUrl}/admin/familles`,
+      const customer = await stripe.customers.create({
+        email: client.email,
+        name: client.name,
       });
-      stripeUrl = session.url;
-      await db.from("invoices").update({ stripe_url: stripeUrl }).eq("id", invoice.id);
+      // Créer la facture d'abord, puis y rattacher explicitement les lignes
+      // (l'API Stripe récente n'inclut plus automatiquement les items en attente).
+      const draft = await stripe.invoices.create({
+        customer: customer.id,
+        collection_method: "send_invoice",
+        days_until_due: 7,
+        auto_advance: false,
+        description: `Natation Côte Basque — ${input.periodLabel}`,
+        metadata: { invoice_id: invoice.id },
+      });
+      if (draft.id) {
+        for (const l of lines) {
+          await stripe.invoiceItems.create({
+            customer: customer.id,
+            invoice: draft.id,
+            amount: l.amount_cents,
+            currency: "eur",
+            description: l.label,
+          });
+        }
+        const finalized = await stripe.invoices.finalizeInvoice(draft.id);
+        stripeUrl = finalized.hosted_invoice_url ?? null;
+        pdfUrl = finalized.invoice_pdf ?? null;
+        await db
+          .from("invoices")
+          .update({ stripe_url: stripeUrl, pdf_url: pdfUrl, stripe_invoice_id: finalized.id })
+          .eq("id", invoice.id);
+      }
     } catch (e) {
       console.error("[invoice:stripe]", e);
     }
   }
 
-  // 3) Email au client (avec lien si dispo).
+  // 3) Email au client (facture + lien de paiement / PDF).
   if (client.email) {
     await sendEmail({
       to: client.email,
@@ -522,7 +538,7 @@ export async function generateInvoice(input: {
   revalidatePath("/admin/familles");
   return {
     ok: true,
-    message: `Facture ${formatEuros(total)} créée${stripeUrl ? " avec lien de paiement" : ""}.`,
+    message: `Facture ${formatEuros(total)} créée${pdfUrl ? " (PDF + lien Stripe)" : stripeUrl ? " avec lien de paiement" : ""}.`,
   };
 }
 
