@@ -46,3 +46,6 @@ next-env.d.ts
 
 # état local du seed E2E
 scripts/.e2e-seed-ids.json
+
+# Doc de passation (contient des identifiants — ne jamais committer)
+GUIDE-PRISE-EN-MAIN.md
