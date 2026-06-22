@@ -7,7 +7,7 @@
  */
 import { env, hasSupabaseAdmin } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { sendEmail, invoiceReminderEmail } from "@/lib/email";
+import { sendEmail, invoiceReminderEmail, adminAlertEmail } from "@/lib/email";
 import { formatEuros } from "@/lib/utils";
 
 function authorized(request: Request): boolean {
@@ -42,7 +42,7 @@ async function run(request: Request) {
     .lte("created_at", threeDaysAgo);
 
   let reminded = 0;
-  let markedLate = 0;
+  const nowLate: string[] = [];
   for (const inv of invoices ?? []) {
     let email: string | null = null;
     if (inv.client_id) {
@@ -67,11 +67,23 @@ async function run(request: Request) {
     }
     if (inv.created_at <= sevenDaysAgo) {
       await supabase.from("invoices").update({ status: "late" }).eq("id", inv.id);
-      markedLate++;
+      nowLate.push(`${inv.client_name} (${formatEuros(inv.total_cents)})`);
     }
   }
 
-  return Response.json({ ok: true, reminded, markedLate, scanned: invoices?.length ?? 0 });
+  // Alerte Eléa : paiements en retard (J+7).
+  if (nowLate.length && env.adminEmail) {
+    await sendEmail({
+      to: env.adminEmail,
+      subject: "⚠ Paiements en retard (J+7) · Natation Côte Basque",
+      html: adminAlertEmail("Factures passées en retard", [
+        `${nowLate.length} facture(s) impayée(s) depuis +7 jours :`,
+        nowLate.join(" · "),
+      ]),
+    }).catch((e) => console.error("[cron:relance:alert]", e));
+  }
+
+  return Response.json({ ok: true, reminded, markedLate: nowLate.length, scanned: invoices?.length ?? 0 });
 }
 
 export const GET = run;

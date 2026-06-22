@@ -370,3 +370,13 @@ alter table public.lessons
   add column if not exists invoice_id uuid references public.invoices (id) on delete set null;
 
 create index if not exists lessons_invoice_idx on public.lessons (invoice_id);
+
+
+-- ╔═══ 5. HORODATAGE STATUT DEMANDE (alertes Eléa) ═══╗
+-- ─────────────────────────────────────────────────────────────
+-- Horodatage du dernier changement de statut d'une demande.
+-- Sert aux alertes Eléa : « proposée mais client muet > 24h ».
+-- Idempotent.
+-- ─────────────────────────────────────────────────────────────
+alter table public.lesson_requests
+  add column if not exists status_changed_at timestamptz not null default now();

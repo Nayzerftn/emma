@@ -10,7 +10,11 @@ import {
   proposalCustomerEmail,
   invoiceCustomerEmail,
   invoiceReminderEmail,
+  lessonConfirmationEmail,
+  lessonCancellationEmail,
+  adminAlertEmail,
 } from "@/lib/email";
+import { formatWhenParis } from "@/lib/platform/notify";
 import { formatEuros } from "@/lib/utils";
 import {
   lessonPriceCents,
@@ -50,7 +54,10 @@ export async function setRequestStatus(
 ): Promise<ActionResult> {
   const db = await guard();
   if (!db) return DENIED;
-  const { error } = await db.from("lesson_requests").update({ status }).eq("id", id);
+  const { error } = await db
+    .from("lesson_requests")
+    .update({ status, status_changed_at: new Date().toISOString() })
+    .eq("id", id);
   if (error) return { ok: false, message: error.message };
   revalidatePath("/admin/demandes");
   return { ok: true, message: "Demande mise à jour." };
@@ -77,7 +84,11 @@ export async function proposeRequest(
 
   const { error } = await db
     .from("lesson_requests")
-    .update({ matched_teacher_id: teacherId, status: "proposed" })
+    .update({
+      matched_teacher_id: teacherId,
+      status: "proposed",
+      status_changed_at: new Date().toISOString(),
+    })
     .eq("id", id);
   if (error) return { ok: false, message: error.message };
 
@@ -192,13 +203,37 @@ export async function confirmRequestLessons(
     if (!res.ok) return { ok: false, message: `Cours ${i + 1} : ${res.message}` };
   }
 
+  const teacherId = req.matched_teacher_id ?? lessons[0].teacherId;
   await db
     .from("lesson_requests")
     .update({
       status: "confirmed",
-      matched_teacher_id: req.matched_teacher_id ?? lessons[0].teacherId,
+      matched_teacher_id: teacherId,
+      status_changed_at: new Date().toISOString(),
     })
     .eq("id", requestId);
+
+  // Email de confirmation au client (récap des cours).
+  if (req.client_id) {
+    const [{ data: client }, { data: teacher }] = await Promise.all([
+      db.from("clients").select("name,email").eq("id", req.client_id).single(),
+      db.from("team_members").select("name").eq("id", teacherId).single(),
+    ]);
+    if (client?.email) {
+      await sendEmail({
+        to: client.email,
+        subject: "Vos cours sont confirmés — Natation Côte Basque",
+        html: lessonConfirmationEmail({
+          clientName: client.name,
+          teacherName: teacher?.name ?? "votre professeure",
+          lessons: lessons.map((l) => ({
+            when: formatWhenParis(l.startsAt),
+            duration: l.durationMin,
+          })),
+        }),
+      }).catch((e) => console.error("[confirm:email]", e));
+    }
+  }
 
   revalidatePath("/admin/demandes");
   revalidatePath("/admin/planning-domicile");
@@ -215,6 +250,45 @@ export async function updateLessonStatus(
   if (!db) return DENIED;
   const { error } = await db.from("lessons").update({ status }).eq("id", id);
   if (error) return { ok: false, message: error.message };
+
+  // Notifications d'annulation (client) + alerte Eléa si annulation < 48h.
+  if (status === "cancelled" || status === "cancelled_late") {
+    const late = status === "cancelled_late";
+    const { data: lesson } = await db
+      .from("lessons")
+      .select("starts_at,client_id,student_name")
+      .eq("id", id)
+      .single();
+    if (lesson?.client_id) {
+      const { data: client } = await db
+        .from("clients")
+        .select("name,email")
+        .eq("id", lesson.client_id)
+        .single();
+      if (client?.email) {
+        await sendEmail({
+          to: client.email,
+          subject: "Cours annulé — Natation Côte Basque",
+          html: lessonCancellationEmail({
+            clientName: client.name,
+            when: formatWhenParis(lesson.starts_at),
+            late,
+          }),
+        }).catch((e) => console.error("[cancel:email]", e));
+      }
+      if (late && env.adminEmail) {
+        await sendEmail({
+          to: env.adminEmail,
+          subject: "⚠ Cours annulé < 48h (dû) — Natation Côte Basque",
+          html: adminAlertEmail("Annulation tardive (< 48h)", [
+            `Cours du ${formatWhenParis(lesson.starts_at)}${lesson.student_name ? ` (${lesson.student_name})` : ""} annulé à moins de 48h.`,
+            "Ce cours reste dû — pensez à le facturer.",
+          ]),
+        }).catch((e) => console.error("[cancel:alert]", e));
+      }
+    }
+  }
+
   revalidatePath("/admin/planning-domicile");
   revalidatePath("/admin/familles");
   return { ok: true, message: "Cours mis à jour." };

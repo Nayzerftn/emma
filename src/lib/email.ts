@@ -165,3 +165,66 @@ export function invoiceReminderEmail(input: {
      <p>Merci !<br/>L'équipe Natation Côte Basque</p>`,
   );
 }
+
+/* ── Notifications cours (client) ──────────────────────────── */
+export function lessonConfirmationEmail(input: {
+  clientName: string;
+  teacherName: string;
+  lessons: { when: string; duration: number }[];
+}) {
+  const rows = input.lessons
+    .map(
+      (l) =>
+        `<li style="margin:4px 0">${l.when} — <strong>${l.duration === 60 ? "1 h" : "30 min"}</strong></li>`,
+    )
+    .join("");
+  return wrap(
+    "Vos cours sont confirmés",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Vos cours avec <strong>${input.teacherName}</strong> sont confirmés :</p>
+     <ul style="padding-left:18px">${rows}</ul>
+     <p>Juste un maillot et des lunettes — on s'occupe du reste. À très vite !</p>
+     <p>L'équipe Natation Côte Basque</p>`,
+  );
+}
+
+export function lessonCancellationEmail(input: {
+  clientName: string;
+  when: string;
+  late: boolean;
+}) {
+  return wrap(
+    "Cours annulé",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Votre cours du <strong>${input.when}</strong> a bien été annulé.</p>
+     ${
+       input.late
+         ? `<p><strong>Ce cours reste dû</strong> conformément à nos conditions (annulation à moins de 48h).</p>`
+         : ""
+     }
+     <p>À bientôt,<br/>L'équipe Natation Côte Basque</p>`,
+  );
+}
+
+export function lessonReminderEmail(input: {
+  clientName: string;
+  when: string;
+  teacherName: string;
+}) {
+  return wrap(
+    "Rappel — cours demain",
+    `<p>Bonjour ${input.clientName},</p>
+     <p>Petit rappel : vous avez cours <strong>${input.when}</strong> avec ${input.teacherName}.</p>
+     <p>N'oubliez pas votre maillot et vos lunettes 🏊</p>
+     <p>L'équipe Natation Côte Basque</p>`,
+  );
+}
+
+/* ── Alerte interne (Eléa) ─────────────────────────────────── */
+export function adminAlertEmail(title: string, lines: string[]) {
+  return wrap(
+    title,
+    `<p>${lines.map((l) => l).join("</p><p>")}</p>
+     <p style="color:#6b6b6b;font-size:13px">À traiter dans l'espace gestion.</p>`,
+  );
+}

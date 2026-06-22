@@ -165,6 +165,7 @@ export type LessonRequestRow = {
   source: "site" | "google_form" | "manual";
   status: RequestStatus;
   matched_teacher_id: string | null;
+  status_changed_at: string;
   created_at: string;
 };
 

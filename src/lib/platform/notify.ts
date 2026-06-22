@@ -4,6 +4,23 @@
  * nécessite un compte Meta validé — à brancher plus tard). Emails via Resend.
  */
 
+/**
+ * Formate un instant ISO en « lundi 6 juillet à 10h00 » — toujours en heure
+ * de Paris (sûr même si le serveur tourne en UTC, ex. Vercel).
+ */
+export function formatWhenParis(iso: string): string {
+  const s = new Date(iso).toLocaleString("fr-FR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Paris",
+  });
+  // "lundi 6 juillet, 10:00" → "lundi 6 juillet à 10h00"
+  return s.replace(", ", " à ").replace(":", "h");
+}
+
 /** Normalise un numéro FR en format international pour wa.me. */
 export function waFromPhone(phone: string): string {
   let digits = phone.replace(/\D/g, "");
