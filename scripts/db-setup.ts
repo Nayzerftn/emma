@@ -33,6 +33,7 @@ const FILES = [
   "supabase/migrations/0003_platform.sql",
   "supabase/migrations/0004_lessons_invoice_link.sql",
   "supabase/migrations/0005_request_status_timestamp.sql",
+  "supabase/migrations/0006_teacher_accounts.sql",
   "supabase/seed.sql",
 ];
 

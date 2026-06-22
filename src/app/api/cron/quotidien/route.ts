@@ -7,7 +7,7 @@
  */
 import { env, hasSupabaseAdmin } from "@/lib/env";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { sendEmail, lessonReminderEmail, adminAlertEmail } from "@/lib/email";
+import { sendEmail, lessonReminderEmail, adminAlertEmail, teacherDayReminderEmail } from "@/lib/email";
 import { formatWhenParis } from "@/lib/platform/notify";
 
 function authorized(request: Request): boolean {
@@ -30,7 +30,7 @@ async function run(request: Request) {
   // ── 1) Rappels J-1 (cours dans ~12h à ~36h, encore prévus) ──
   const { data: lessons } = await supabase
     .from("lessons")
-    .select("starts_at,client_id,teacher_id")
+    .select("starts_at,client_id,teacher_id,student_name,zone")
     .eq("status", "scheduled")
     .gte("starts_at", iso(12 * H))
     .lte("starts_at", iso(36 * H));
@@ -51,6 +51,30 @@ async function run(request: Request) {
       }),
     }).catch((e) => console.error("[cron:rappel]", e));
     reminded++;
+  }
+
+  // Rappel veille aux professeures (un digest par prof).
+  const byTeacher = new Map<string, { when: string; student?: string | null; zone?: string | null }[]>();
+  for (const l of lessons ?? []) {
+    byTeacher.set(l.teacher_id, [
+      ...(byTeacher.get(l.teacher_id) ?? []),
+      { when: formatWhenParis(l.starts_at), student: l.student_name, zone: l.zone },
+    ]);
+  }
+  let teachersReminded = 0;
+  for (const [teacherId, ls] of byTeacher) {
+    const { data: t } = await supabase
+      .from("team_members")
+      .select("name,email")
+      .eq("id", teacherId)
+      .single();
+    if (!t?.email) continue;
+    await sendEmail({
+      to: t.email,
+      subject: "Vos cours demain · Natation Côte Basque",
+      html: teacherDayReminderEmail({ teacherName: t.name, lessons: ls }),
+    }).catch((e) => console.error("[cron:rappel-prof]", e));
+    teachersReminded++;
   }
 
   // ── 2) Alertes Eléa (digest) ──
@@ -103,7 +127,7 @@ async function run(request: Request) {
     }).catch((e) => console.error("[cron:alertes]", e));
   }
 
-  return Response.json({ ok: true, reminded, alerts: alerts.length });
+  return Response.json({ ok: true, reminded, teachersReminded, alerts: alerts.length });
 }
 
 export const GET = run;

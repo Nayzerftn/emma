@@ -220,6 +220,70 @@ export function lessonReminderEmail(input: {
   );
 }
 
+/* ── Notifications professeure ─────────────────────────────── */
+export function teacherNewLessonEmail(input: {
+  teacherName: string;
+  lessons: {
+    when: string;
+    duration: number;
+    student?: string | null;
+    zone?: string | null;
+    address?: string | null;
+    phone?: string | null;
+  }[];
+}) {
+  const rows = input.lessons
+    .map(
+      (l) =>
+        `<li style="margin:6px 0">${l.when} · <strong>${l.duration === 60 ? "1 h" : "30 min"}</strong>${
+          l.student ? ` — ${l.student}` : ""
+        }${l.zone ? ` · secteur ${l.zone}` : ""}${l.address ? `<br/><span style="color:#6b6b6b">${l.address}</span>` : ""}${
+          l.phone ? `<br/><span style="color:#6b6b6b">Parent : ${l.phone}</span>` : ""
+        }</li>`,
+    )
+    .join("");
+  const plural = input.lessons.length > 1;
+  return wrap(
+    plural ? "Nouveaux cours attribués" : "Nouveau cours attribué",
+    `<p>Bonjour ${input.teacherName.split(" ")[0]},</p>
+     <p>${plural ? "De nouveaux cours vous ont été attribués" : "Un nouveau cours vous a été attribué"} :</p>
+     <ul style="padding-left:18px">${rows}</ul>
+     <p>Retrouvez tout dans votre espace : <strong>/prof</strong></p>`,
+  );
+}
+
+export function teacherCancellationEmail(input: {
+  teacherName: string;
+  when: string;
+  student?: string | null;
+}) {
+  return wrap(
+    "Cours annulé",
+    `<p>Bonjour ${input.teacherName.split(" ")[0]},</p>
+     <p>Le cours du <strong>${input.when}</strong>${input.student ? ` (${input.student})` : ""} a été annulé.</p>
+     <p>Votre planning est à jour dans votre espace /prof.</p>`,
+  );
+}
+
+export function teacherDayReminderEmail(input: {
+  teacherName: string;
+  lessons: { when: string; student?: string | null; zone?: string | null }[];
+}) {
+  const rows = input.lessons
+    .map(
+      (l) =>
+        `<li style="margin:4px 0">${l.when}${l.student ? ` — ${l.student}` : ""}${l.zone ? ` · secteur ${l.zone}` : ""}</li>`,
+    )
+    .join("");
+  return wrap(
+    "Vos cours demain",
+    `<p>Bonjour ${input.teacherName.split(" ")[0]},</p>
+     <p>Rappel de vos cours de demain :</p>
+     <ul style="padding-left:18px">${rows}</ul>
+     <p>Bonne journée 🏊</p>`,
+  );
+}
+
 /* ── Alerte interne (Eléa) ─────────────────────────────────── */
 export function adminAlertEmail(title: string, lines: string[]) {
   return wrap(

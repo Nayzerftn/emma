@@ -5,6 +5,9 @@ import {
   lessonCancellationEmail,
   lessonReminderEmail,
   adminAlertEmail,
+  teacherNewLessonEmail,
+  teacherCancellationEmail,
+  teacherDayReminderEmail,
 } from "@/lib/email";
 
 describe("formatWhenParis (heure de Paris, sûr en UTC)", () => {
@@ -60,5 +63,41 @@ describe("Email alerte Eléa", () => {
     expect(html).toContain("3 demandes non traitées");
     expect(html).toContain("1 sans match");
     expect(html).toContain("Demandes à traiter");
+  });
+});
+
+describe("Emails professeure", () => {
+  it("nouveau cours : prof, créneau, élève, secteur, tél parent", () => {
+    const html = teacherNewLessonEmail({
+      teacherName: "Oïana",
+      lessons: [{ when: "lundi 6 juillet à 10h00", duration: 30, student: "Léa", zone: "C", phone: "0612345678" }],
+    });
+    expect(html).toContain("Oïana");
+    expect(html).toContain("lundi 6 juillet à 10h00");
+    expect(html).toContain("Léa");
+    expect(html).toContain("secteur C");
+    expect(html).toContain("0612345678");
+    expect(html).toContain("Nouveau cours");
+  });
+  it("plusieurs cours → pluriel", () => {
+    const html = teacherNewLessonEmail({
+      teacherName: "Clara",
+      lessons: [{ when: "a", duration: 30 }, { when: "b", duration: 60 }],
+    });
+    expect(html).toContain("Nouveaux cours");
+  });
+  it("annulation prof : créneau + élève", () => {
+    const html = teacherCancellationEmail({ teacherName: "Thaïs", when: "mardi 7 juillet à 14h00", student: "Tom" });
+    expect(html).toContain("mardi 7 juillet à 14h00");
+    expect(html).toContain("Tom");
+    expect(html).toContain("annulé");
+  });
+  it("rappel veille prof : liste des cours", () => {
+    const html = teacherDayReminderEmail({
+      teacherName: "Audrey",
+      lessons: [{ when: "demain 9h00", student: "Mateo", zone: "B" }],
+    });
+    expect(html).toContain("Mateo");
+    expect(html).toContain("demain");
   });
 });

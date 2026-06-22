@@ -13,6 +13,8 @@ import {
   lessonConfirmationEmail,
   lessonCancellationEmail,
   adminAlertEmail,
+  teacherNewLessonEmail,
+  teacherCancellationEmail,
 } from "@/lib/email";
 import { formatWhenParis } from "@/lib/platform/notify";
 import { formatEuros } from "@/lib/utils";
@@ -164,12 +166,57 @@ async function insertLesson(
   return { ok: true };
 }
 
+type TeacherLessonLine = {
+  when: string;
+  duration: LessonDuration;
+  student?: string | null;
+  zone?: string | null;
+  address?: string | null;
+  phone?: string | null;
+};
+
+/** Notifie la professeure de nouveaux cours attribués (email). Best-effort. */
+async function notifyTeacherNew(
+  db: NonNullable<Awaited<ReturnType<typeof guard>>>,
+  teacherId: string,
+  lessons: TeacherLessonLine[],
+) {
+  const { data: t } = await db
+    .from("team_members")
+    .select("name,email")
+    .eq("id", teacherId)
+    .single();
+  if (!t?.email) return;
+  await sendEmail({
+    to: t.email,
+    subject: lessons.length > 1 ? "Nouveaux cours attribués" : "Nouveau cours attribué",
+    html: teacherNewLessonEmail({ teacherName: t.name, lessons }),
+  }).catch((e) => console.error("[teacher:new]", e));
+}
+
 /** Crée un cours isolé (planning manuel). */
 export async function createLesson(input: NewLessonInput): Promise<ActionResult> {
   const db = await guard();
   if (!db) return DENIED;
   const res = await insertLesson(db, input);
   if (!res.ok) return res;
+
+  let phone: string | null = null;
+  if (input.clientId) {
+    const { data: c } = await db.from("clients").select("phone").eq("id", input.clientId).single();
+    phone = c?.phone ?? null;
+  }
+  await notifyTeacherNew(db, input.teacherId, [
+    {
+      when: formatWhenParis(input.startsAt),
+      duration: input.durationMin,
+      student: input.studentName,
+      zone: input.zone,
+      address: input.address,
+      phone,
+    },
+  ]);
+
   revalidatePath("/admin/planning-domicile");
   revalidatePath("/admin/familles");
   return { ok: true, message: "Cours planifié." };
@@ -214,11 +261,13 @@ export async function confirmRequestLessons(
     .eq("id", requestId);
 
   // Email de confirmation au client (récap des cours).
+  let clientPhone: string | null = null;
   if (req.client_id) {
     const [{ data: client }, { data: teacher }] = await Promise.all([
-      db.from("clients").select("name,email").eq("id", req.client_id).single(),
+      db.from("clients").select("name,email,phone").eq("id", req.client_id).single(),
       db.from("team_members").select("name").eq("id", teacherId).single(),
     ]);
+    clientPhone = client?.phone ?? null;
     if (client?.email) {
       await sendEmail({
         to: client.email,
@@ -234,6 +283,20 @@ export async function confirmRequestLessons(
       }).catch((e) => console.error("[confirm:email]", e));
     }
   }
+
+  // Notification à la professeure (cours attribués).
+  await notifyTeacherNew(
+    db,
+    teacherId,
+    lessons.map((l) => ({
+      when: formatWhenParis(l.startsAt),
+      duration: l.durationMin,
+      student: req.student_name,
+      zone: req.zone,
+      address: req.address,
+      phone: clientPhone,
+    })),
+  );
 
   revalidatePath("/admin/demandes");
   revalidatePath("/admin/planning-domicile");
@@ -256,9 +319,30 @@ export async function updateLessonStatus(
     const late = status === "cancelled_late";
     const { data: lesson } = await db
       .from("lessons")
-      .select("starts_at,client_id,student_name")
+      .select("starts_at,client_id,student_name,teacher_id")
       .eq("id", id)
       .single();
+
+    // Notification à la professeure concernée.
+    if (lesson?.teacher_id) {
+      const { data: t } = await db
+        .from("team_members")
+        .select("name,email")
+        .eq("id", lesson.teacher_id)
+        .single();
+      if (t?.email) {
+        await sendEmail({
+          to: t.email,
+          subject: "Cours annulé — Natation Côte Basque",
+          html: teacherCancellationEmail({
+            teacherName: t.name,
+            when: formatWhenParis(lesson.starts_at),
+            student: lesson.student_name,
+          }),
+        }).catch((e) => console.error("[teacher:cancel]", e));
+      }
+    }
+
     if (lesson?.client_id) {
       const { data: client } = await db
         .from("clients")

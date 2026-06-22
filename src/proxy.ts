@@ -32,16 +32,21 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isLogin = path.startsWith("/admin/login");
 
-  if (path.startsWith("/admin") && !isLogin && !user) {
+  // Sessions présentes mais non autorisées (ex. prof sur /admin, admin sur /prof) :
+  // on ne redirige PAS les pages login vers le dashboard (sinon boucle infinie
+  // avec la vérif de rôle du layout). On gate juste l'accès non authentifié.
+  const isAdminLogin = path.startsWith("/admin/login");
+  if (path.startsWith("/admin") && !isAdminLogin && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
-  if (isLogin && user) {
+
+  const isProfLogin = path.startsWith("/prof/login");
+  if (path.startsWith("/prof") && !isProfLogin && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin";
+    url.pathname = "/prof/login";
     return NextResponse.redirect(url);
   }
 
@@ -49,5 +54,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/prof/:path*"],
 };

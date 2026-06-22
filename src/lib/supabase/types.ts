@@ -28,6 +28,8 @@ export type TeamMemberRow = {
   whatsapp: string | null;
   display_order: number;
   is_active: boolean;
+  auth_user_id: string | null;
+  email: string | null;
   created_at: string;
 };
 
