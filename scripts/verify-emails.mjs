@@ -3,7 +3,7 @@ const KEY = process.env.RESEND_API_KEY;
 const FROM = process.env.EMAIL_FROM;
 const TO = process.env.ADMIN_NOTIFICATION_EMAIL || "contact@nayzerapp.com";
 let pass = 0, fail = 0;
-const check = (l, ok) => { ok ? pass++ : fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
+const check = (l, ok) => { if (ok) pass++; else fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 console.log(`from=${FROM} → to=${TO}`);

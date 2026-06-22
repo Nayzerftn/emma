@@ -8,7 +8,7 @@ const admin = createClient(URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: {
 const anon = createClient(URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY, { auth: { persistSession: false } });
 
 let pass = 0, fail = 0;
-const check = (l, ok) => { ok ? pass++ : fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
+const check = (l, ok) => { if (ok) pass++; else fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
 
 // ── A. RLS : un visiteur anonyme ne doit PAS lire le PII plateforme ───────────
 console.log("— A. RLS (clé anonyme) —");

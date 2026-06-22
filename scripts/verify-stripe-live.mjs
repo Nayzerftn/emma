@@ -12,7 +12,7 @@ const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABA
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 let pass = 0, fail = 0;
-const check = (l, ok) => { ok ? pass++ : fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
+const check = (l, ok) => { if (ok) pass++; else fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const { data: fam } = await db.from("clients").select("id").eq("name", FAMILY).single();

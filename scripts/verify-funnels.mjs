@@ -6,7 +6,7 @@ const BASE = "http://localhost:3002";
 const TOKEN = process.env.INTAKE_TOKEN;
 const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 let pass = 0, fail = 0;
-const check = (l, ok) => { ok ? pass++ : fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
+const check = (l, ok) => { if (ok) pass++; else fail++; console.log(`${ok ? "✓" : "✗ ÉCHEC"} ${l}`); };
 
 // ── 1. Intake Google Form ────────────────────────────────────────────────────
 console.log("— 1. Intake (endpoint Google Form) —");
@@ -20,7 +20,6 @@ check(`refus sans token (HTTP ${noAuth.status})`, noAuth.status === 401);
 
 // b) avec token → 200 + ligne en base
 const ok = await fetch(`${BASE}/api/intake/google-form`, { method: "POST", headers: { "Content-Type": "application/json", "x-intake-token": TOKEN }, body: JSON.stringify(payload) });
-const okBody = await ok.json().catch(() => ({}));
 check(`accepté avec token (HTTP ${ok.status})`, ok.ok);
 const { data: req } = await db.from("lesson_requests").select("id,name,type,zone,source,status").eq("email", uniqEmail).maybeSingle();
 check("demande créée en base depuis l'intake", !!req);
