@@ -82,7 +82,7 @@ export function StatsBand({ items }: { items: readonly { head: string; sub: stri
             delay={i * 0.08}
             className="border-paper/15 flex flex-col gap-2 border-b py-8 sm:border-b-0 lg:border-l lg:px-7 lg:first:border-l-0 lg:first:pl-0"
           >
-            <p className="font-display text-xl font-black uppercase tracking-[-0.01em] md:text-2xl">
+            <p className="font-display text-lg font-black uppercase tracking-[-0.02em] whitespace-nowrap">
               {s.head}
             </p>
             <p className="text-paper/65 text-small">{s.sub}</p>
