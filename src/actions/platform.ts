@@ -16,7 +16,8 @@ import {
   teacherNewLessonEmail,
   teacherCancellationEmail,
 } from "@/lib/email";
-import { formatWhenParis } from "@/lib/platform/notify";
+import { formatWhenParis, proposalMessage } from "@/lib/platform/notify";
+import { sendWhatsApp } from "@/lib/platform/whatsapp";
 import { formatEuros } from "@/lib/utils";
 import {
   lessonPriceCents,
@@ -25,6 +26,7 @@ import {
   isChargeable,
 } from "@/lib/platform/billing";
 import { canSchedule, type PlanSlot } from "@/lib/platform/planning";
+import { proposeSlots, toParis } from "@/lib/platform/slots";
 import type {
   RequestStatus,
   LessonStatus,
@@ -74,7 +76,7 @@ export async function proposeRequest(
   if (!db) return DENIED;
   const { data: req } = await db
     .from("lesson_requests")
-    .select("name,email,type")
+    .select("name,email,phone,type,student_name")
     .eq("id", id)
     .single();
   const { data: teacher } = await db
@@ -105,8 +107,70 @@ export async function proposeRequest(
       }),
     }).catch((e) => console.error("[propose:email]", e));
   }
+  // WhatsApp auto (si Meta configuré) — sinon no-op (lien wa.me dispo dans l'UI).
+  if (req.phone) {
+    await sendWhatsApp(
+      req.phone,
+      proposalMessage({
+        clientName: req.name,
+        teacherName: teacher.name,
+        studentName: req.student_name,
+        type: req.type,
+      }),
+    ).catch((e) => console.error("[propose:wa]", e));
+  }
   revalidatePath("/admin/demandes");
   return { ok: true, message: `Proposé : ${teacher.name}.` };
+}
+
+/** Propose automatiquement des créneaux libres pour la prof retenue d'une demande. */
+export async function proposeSlotsForRequest(
+  requestId: string,
+): Promise<{ ok: boolean; slots?: { date: string; time: string }[]; message?: string }> {
+  const db = await guard();
+  if (!db) return { ok: false, message: "Non autorisé." };
+
+  const { data: req } = await db
+    .from("lesson_requests")
+    .select("matched_teacher_id,preferred_teacher_id,duration_min")
+    .eq("id", requestId)
+    .single();
+  if (!req) return { ok: false, message: "Demande introuvable." };
+  const teacherId = req.matched_teacher_id ?? req.preferred_teacher_id;
+  if (!teacherId) return { ok: false, message: "Choisis d'abord une professeure (Proposer)." };
+
+  const { data: settings } = await db
+    .from("teacher_settings")
+    .select("availability")
+    .eq("teacher_id", teacherId)
+    .maybeSingle();
+  const availability = settings?.availability ?? { base: [], exceptions: [] };
+  if (!availability.base?.length) {
+    return { ok: false, message: "Cette professeure n'a pas de disponibilités déclarées." };
+  }
+
+  // Cours existants de la prof (à venir) → occupations en heure de Paris.
+  const { data: lessons } = await db
+    .from("lessons")
+    .select("starts_at,duration_min")
+    .eq("teacher_id", teacherId)
+    .in("status", ["scheduled", "done"])
+    .gte("starts_at", new Date().toISOString());
+  const busy = (lessons ?? []).map((l) => toParis(l.starts_at, l.duration_min));
+
+  const startDate = new Date().toISOString().slice(0, 10);
+  const slots = proposeSlots({
+    availability,
+    busy,
+    durationMin: req.duration_min,
+    startDate,
+    days: 28,
+    max: 10,
+  });
+  if (slots.length === 0) {
+    return { ok: false, message: "Aucun créneau libre trouvé sur les 4 prochaines semaines." };
+  }
+  return { ok: true, slots };
 }
 
 export type NewLessonInput = {
@@ -319,7 +383,7 @@ export async function updateLessonStatus(
     const late = status === "cancelled_late";
     const { data: lesson } = await db
       .from("lessons")
-      .select("starts_at,client_id,student_name,teacher_id")
+      .select("starts_at,client_id,student_name,teacher_id,zone")
       .eq("id", id)
       .single();
 
@@ -360,16 +424,38 @@ export async function updateLessonStatus(
           }),
         }).catch((e) => console.error("[cancel:email]", e));
       }
-      if (late && env.adminEmail) {
-        await sendEmail({
-          to: env.adminEmail,
-          subject: "⚠ Cours annulé < 48h (dû) — Natation Côte Basque",
-          html: adminAlertEmail("Annulation tardive (< 48h)", [
-            `Cours du ${formatWhenParis(lesson.starts_at)}${lesson.student_name ? ` (${lesson.student_name})` : ""} annulé à moins de 48h.`,
-            "Ce cours reste dû — pensez à le facturer.",
-          ]),
-        }).catch((e) => console.error("[cancel:alert]", e));
-      }
+    }
+
+    // Cascade : alerte Eléa + suggestion de remplacement (prof couvrant le secteur).
+    if (lesson && env.adminEmail) {
+      const when = formatWhenParis(lesson.starts_at);
+      const lines = [
+        `Cours du ${when}${lesson.student_name ? ` (${lesson.student_name})` : ""}${lesson.zone ? ` · secteur ${lesson.zone}` : ""} annulé${late ? " à moins de 48h." : "."}`,
+      ];
+      if (late) lines.push("⚠ Ce cours reste dû — pensez à le facturer.");
+      const [{ data: pool }, { data: setts }] = await Promise.all([
+        db.from("team_members").select("id,name,services").eq("is_active", true),
+        db.from("teacher_settings").select("teacher_id,zones"),
+      ]);
+      const zoneOf = new Map((setts ?? []).map((s) => [s.teacher_id, s.zones]));
+      const repl = (pool ?? [])
+        .filter(
+          (t) =>
+            t.id !== lesson.teacher_id &&
+            (t.services.includes("domicile") || t.services.includes("ocean")) &&
+            (!lesson.zone || (zoneOf.get(t.id) ?? []).includes(lesson.zone)),
+        )
+        .map((t) => t.name);
+      lines.push(
+        repl.length
+          ? `Remplacement possible${lesson.zone ? ` (secteur ${lesson.zone})` : ""} : ${repl.join(", ")}.`
+          : "Aucune remplaçante évidente sur ce secteur — à arbitrer.",
+      );
+      await sendEmail({
+        to: env.adminEmail,
+        subject: late ? "⚠ Cours annulé < 48h (dû) — remplacement ?" : "Cours annulé — remplacement ?",
+        html: adminAlertEmail("Cours annulé", lines),
+      }).catch((e) => console.error("[cancel:alert]", e));
     }
   }
 
@@ -395,7 +481,10 @@ export async function saveTeacherSettings(input: {
   maxPerDay: number;
   payout30Cents: number;
   payout60Cents: number;
-  availability: { base: { weekday: number; parts: string[] }[]; exceptions: { date: string; off?: boolean }[] };
+  availability: {
+    base: { weekday: number; windows: { start: string; end: string }[] }[];
+    exceptions: { date: string; off?: boolean }[];
+  };
 }): Promise<ActionResult> {
   const db = await guard();
   if (!db) return DENIED;

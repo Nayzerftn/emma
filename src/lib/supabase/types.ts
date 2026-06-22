@@ -130,7 +130,7 @@ export type TeacherSettingsRow = {
   payout_30_cents: number;
   payout_60_cents: number;
   availability: {
-    base: { weekday: number; parts: string[] }[];
+    base: { weekday: number; windows: { start: string; end: string }[] }[];
     exceptions: { date: string; off?: boolean }[];
   };
   updated_at: string;

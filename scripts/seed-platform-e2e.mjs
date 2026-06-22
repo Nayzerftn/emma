@@ -60,25 +60,27 @@ async function main() {
 
   const ids = { teacher_settings: [], clients: [], lesson_requests: [], lessons: [], invoices: [] };
 
-  /* ── 1. Réglages professeures ──────────────────────────────── */
+  /* ── 1. Réglages professeures (fenêtres horaires) ──────────── */
+  const AM = { start: "09:00", end: "12:00" };
+  const PM = { start: "14:00", end: "18:00" };
   const settings = [
-    // Oïana — Bidart/Biarritz, dispo Lun/Mer/Ven matin + Sam
+    // Oïana — Bidart/Biarritz, dispo Lun/Mer/Ven matin + Sam matin & après-midi
     { teacher_id: T.oiana, zones: ["B", "C", "D"], max_per_day: 5,
       availability: { base: [
-        { weekday: 1, parts: ["matin"] }, { weekday: 3, parts: ["matin"] },
-        { weekday: 5, parts: ["matin"] }, { weekday: 6, parts: ["matin", "après-midi"] },
+        { weekday: 1, windows: [AM] }, { weekday: 3, windows: [AM] },
+        { weekday: 5, windows: [AM] }, { weekday: 6, windows: [AM, PM] },
       ], exceptions: [] } },
-    // Thaïs — Biarritz/Anglet, dispo Mar/Jeu/Sam
+    // Thaïs — Biarritz/Anglet, dispo Mar/Jeu après-midi + Sam matin
     { teacher_id: T.thais, zones: ["C", "D", "E"], max_per_day: 5,
       availability: { base: [
-        { weekday: 2, parts: ["après-midi"] }, { weekday: 4, parts: ["après-midi"] },
-        { weekday: 6, parts: ["matin"] },
+        { weekday: 2, windows: [PM] }, { weekday: 4, windows: [PM] },
+        { weekday: 6, windows: [AM] },
       ], exceptions: [] } },
     // Clara — Anglet/Bayonne, dispo en semaine après-midi
     { teacher_id: T.clara, zones: ["E", "F", "G"], max_per_day: 6,
       availability: { base: [
-        { weekday: 1, parts: ["après-midi"] }, { weekday: 2, parts: ["après-midi"] },
-        { weekday: 4, parts: ["après-midi"] },
+        { weekday: 1, windows: [PM] }, { weekday: 2, windows: [PM] },
+        { weekday: 4, windows: [PM] },
       ], exceptions: [] } },
     // Audrey — Guéthary/Bidart, AUCUNE disponibilité déclarée (cas edge matching)
     { teacher_id: T.audrey, zones: ["A", "B"], max_per_day: 4,

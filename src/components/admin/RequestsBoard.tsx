@@ -7,6 +7,7 @@ import {
   proposeRequest,
   setRequestStatus,
   confirmRequestLessons,
+  proposeSlotsForRequest,
   type NewLessonInput,
 } from "@/actions/platform";
 import { EmptyState } from "@/components/admin/AdminShell";
@@ -96,6 +97,18 @@ function RequestItem({ r, teachers }: { r: RequestCard; teachers: { id: string; 
       lessons.push({ teacherId, startsAt: iso, durationMin: row.duration });
     }
     act(() => confirmRequestLessons(r.id, lessons));
+  }
+
+  function autoPropose() {
+    startTransition(async () => {
+      const res = await proposeSlotsForRequest(r.id);
+      if (!res.ok || !res.slots) {
+        toast.error(res.message ?? "Aucun créneau.");
+        return;
+      }
+      setRows(res.slots.map((s) => ({ date: s.date, time: s.time, duration: r.durationMin })));
+      toast.success(`${res.slots.length} créneau(x) proposé(s).`);
+    });
   }
 
   const proposedName = teachers.find((t) => t.id === teacherId)?.name ?? "";
@@ -284,6 +297,13 @@ function RequestItem({ r, teachers }: { r: RequestCard; teachers: { id: string; 
                 </div>
               ))}
               <div className="flex flex-wrap gap-2">
+                <button
+                  disabled={pending}
+                  onClick={autoPropose}
+                  className="border-ink hover:bg-ink hover:text-paper border px-3 py-1 text-[0.66rem] font-semibold uppercase tracking-[0.08em] disabled:opacity-50"
+                >
+                  ⚡ Proposer des créneaux
+                </button>
                 <button
                   onClick={() =>
                     setRows((rs) => [...rs, { date: "", time: "", duration: r.durationMin }])
