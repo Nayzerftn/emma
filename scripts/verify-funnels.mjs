@@ -61,8 +61,9 @@ try {
   console.error("ERREUR :", e.message);
   fail++;
 } finally {
-  // nettoyage de la demande de test
+  // nettoyage : la demande ET le client créé par l'intake (upsert client + insert demande)
   if (req) await db.from("lesson_requests").delete().eq("id", req.id);
+  await db.from("clients").delete().eq("email", uniqEmail);
   await browser.close();
   process.exit(fail > 0 ? 1 : 0);
 }
