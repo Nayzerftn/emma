@@ -1,9 +1,9 @@
-/** PAGE 6 — KINÉSIOLOGIE (Annexe A). Réservation = Square (rendez-vous). Aucun prix. */
-import { SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
+/** PAGE 6 — KINÉSIOLOGIE (Annexe A). Réservation = WhatsApp Maïka. Aucun prix. */
+import { WHATSAPP, waLink } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const MAIKA_CTA = "Réserver une séance";
-const MAIKA_HREF = SQUARE_APPOINTMENTS_URL;
+const MAIKA_CTA = `WhatsApp Maïka — ${WHATSAPP.maika.phone}`;
+const MAIKA_HREF = waLink(WHATSAPP.maika);
 
 export const KINE = {
   hero: {
@@ -51,7 +51,7 @@ export const KINE = {
     titleLines: ["La peur de l'eau,", "c'est fini."],
     text: "Kinésiologie à domicile ou cabinet à Anglet et Bidart. Petits comme grands, toute l'année.",
     buttons: [
-      { label: MAIKA_CTA, href: MAIKA_HREF, kind: "primary" },
+      { label: MAIKA_CTA, href: MAIKA_HREF, kind: "whatsapp" },
       { label: "Voir l'équipe", href: "/equipe", kind: "outline" },
     ] satisfies CtaButton[],
   },

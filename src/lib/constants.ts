@@ -24,6 +24,28 @@ export const POOL_ADDRESS = {
   full: "1415 av. de Biarritz, Bidart (Chambre d'hôtes Irigoyen) — petit parking sur la droite, bâtiment en face.",
 } as const;
 
+type WhatsAppEntry = { phone: string; number: string; message: string };
+
+/** WhatsApp — uniquement kinésiologie (Maïka) et surf (Clara D.). */
+export const WHATSAPP = {
+  maika: {
+    phone: "06 65 57 37 40",
+    number: "33665573740",
+    message:
+      "Bonjour Maïka, je souhaite des informations sur une séance de kinésiologie (peur de l'eau).",
+  },
+  claraD: {
+    phone: "06 77 83 66 04",
+    number: "33677836604",
+    message: "Bonjour Clara, je souhaite des informations sur un cours de surf.",
+  },
+} satisfies Record<string, WhatsAppEntry>;
+
+/** Construit un lien wa.me avec message pré-rempli. */
+export function waLink(entry: WhatsAppEntry): string {
+  return `https://wa.me/${entry.number}?text=${encodeURIComponent(entry.message)}`;
+}
+
 /** Villes du Pays Basque desservies (marquee + SEO). */
 export const CITIES = [
   "Bayonne",
@@ -58,6 +80,6 @@ export const RESERVATION_HREF = "/reservation";
 export const SQUARE_BOOKING_URL =
   "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LJ3931E19TX0B/classes?buttonTextColor=ffffff&color=000000&referrer=so";
 
-/** Réservation RENDEZ-VOUS — Square (domicile, océan, kiné, surf). */
+/** Réservation RENDEZ-VOUS — Square (domicile, océan). Kiné & surf = WhatsApp. */
 export const SQUARE_APPOINTMENTS_URL =
   "https://book.squareup.com/appointments/g7n1j9vp7a40l8/location/LJ3931E19TX0B/services";
