@@ -61,9 +61,3 @@ export const SQUARE_BOOKING_URL =
 /** Réservation RENDEZ-VOUS — Square (domicile, océan, kiné, surf). */
 export const SQUARE_APPOINTMENTS_URL =
   "https://book.squareup.com/appointments/g7n1j9vp7a40l8/location/LJ3931E19TX0B/services";
-
-/** Liens legacy (référence — remplacés par les flux natifs). */
-export const LEGACY = {
-  square: null,
-  googleForm: "https://forms.gle/VtwMktvbLYPeYDpS7",
-} as const;
