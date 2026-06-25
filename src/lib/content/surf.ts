@@ -1,9 +1,9 @@
-/** PAGE 7 — SURF (Annexe A). Réservation = WhatsApp Clara D. Aucun prix. */
-import { WHATSAPP, waLink } from "@/lib/constants";
+/** PAGE 7 — SURF (Annexe A). Réservation = Square (rendez-vous). Aucun prix. */
+import { SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const CLARA_CTA = `WhatsApp Clara D. — ${WHATSAPP.claraD.phone}`;
-const CLARA_HREF = waLink(WHATSAPP.claraD);
+const CLARA_CTA = "Réserver un cours";
+const CLARA_HREF = SQUARE_APPOINTMENTS_URL;
 
 export const SURF = {
   hero: {
@@ -36,7 +36,7 @@ export const SURF = {
       },
       { label: "Lieu", value: "Sur toute la Côte Basque" },
       { label: "Pour qui", value: "Tous les âges · toute l'année" },
-      { label: "Réservation", value: `WhatsApp — ${WHATSAPP.claraD.phone}` },
+      { label: "Réservation", value: "En ligne · sur rendez-vous" },
     ],
     cta: { label: CLARA_CTA, href: CLARA_HREF },
   },
@@ -44,7 +44,7 @@ export const SURF = {
     titleLines: ["Apprendre le surf", "ou surf-thérapie."],
     text: "Cours de surf sur toute la Côte Basque — débutant, perfectionnement ou thérapeutique. Pour tous les âges, toute l'année.",
     buttons: [
-      { label: CLARA_CTA, href: CLARA_HREF, kind: "whatsapp" },
+      { label: CLARA_CTA, href: CLARA_HREF, kind: "primary" },
       { label: "Voir l'équipe", href: "/equipe", kind: "outline" },
     ] satisfies CtaButton[],
   },

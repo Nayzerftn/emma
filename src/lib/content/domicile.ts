@@ -1,8 +1,8 @@
 /** PAGE 4 — COURS À DOMICILE (Annexe A). */
-import { RESERVATION_HREF } from "@/lib/constants";
+import { SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const LEAD_HREF = `${RESERVATION_HREF}?type=domicile#en-ligne`;
+const LEAD_HREF = SQUARE_APPOINTMENTS_URL;
 
 export const DOMICILE = {
   hero: {

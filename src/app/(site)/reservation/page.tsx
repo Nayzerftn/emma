@@ -2,70 +2,56 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion/Reveal";
 import { DisplayTitle, Eyebrow } from "@/components/site/Typography";
 import { PrimaryCta } from "@/components/site/CtaButtons";
-import { LeadForm } from "@/components/site/LeadForm";
-import { WHATSAPP, waLink } from "@/lib/constants";
+import { SQUARE_BOOKING_URL, SQUARE_APPOINTMENTS_URL, POOL_ADDRESS } from "@/lib/constants";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("reservation");
 
-export default async function ReservationPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>;
-}) {
-  const { type } = await searchParams;
-  const initialType = type === "ocean" ? "ocean" : "domicile";
-
+export default function ReservationPage() {
   return (
-    <>
-      {/* Formulaire en avant — première section */}
-      <section id="en-ligne" className="shell scroll-mt-24 pt-28 pb-16 md:pt-36 md:pb-24">
+    <section className="shell pt-28 pb-20 md:pt-36 md:pb-28">
+      <Reveal>
+        <div className="mx-auto max-w-2xl text-center">
+          <Eyebrow className="mb-3">Réservation · Natation Côte Basque</Eyebrow>
+          <DisplayTitle as="h1" lines={["On se", "lance ?"]} className="text-h1" />
+          <p className="text-meta mx-auto mt-6 max-w-xl text-lg leading-relaxed">
+            Réservez en ligne en quelques clics. Choisissez votre formule ci-dessous.
+          </p>
+        </div>
+      </Reveal>
+
+      <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
+        {/* Bassin privé → Square (classes) */}
         <Reveal>
-          <div className="mx-auto max-w-2xl text-center">
-            <Eyebrow className="mb-3">En ligne · réponse 24h</Eyebrow>
-            <DisplayTitle
-              as="h1"
-              lines={["Cours de natation", "& initiation océan."]}
-              className="text-h1"
-            />
-            <p className="text-meta mx-auto mt-6 max-w-xl text-lg leading-relaxed">
-              Indiquez votre niveau, vos disponibilités et votre adresse. On vous
-              recontacte avec la professeure la plus adaptée et des propositions de
-              créneaux.
+          <div className="border-filet flex h-full flex-col border p-8">
+            <Eyebrow className="text-meta">Bassin privé · Bidart</Eyebrow>
+            <h2 className="font-display mt-3 text-2xl font-bold">Cours en bassin privé</h2>
+            <p className="text-meta mt-3 flex-1 leading-relaxed">
+              Enfants en mini-groupes de 3, adultes en individuel. Piscine couverte et chauffée.
+              {" "}
+              {POOL_ADDRESS.full}
             </p>
+            <div className="mt-6">
+              <PrimaryCta label="Réserver en bassin privé" href={SQUARE_BOOKING_URL} />
+            </div>
           </div>
         </Reveal>
-        <div className="mx-auto mt-12 max-w-4xl">
-          <LeadForm initialType={initialType} />
-        </div>
-      </section>
 
-      {/* Kinésiologie & surf — WhatsApp */}
-      <section id="whatsapp" className="bg-sand scroll-mt-24 py-16 md:py-24">
-        <div className="shell">
-          <Eyebrow className="mb-3">WhatsApp</Eyebrow>
-          <DisplayTitle lines={["Kinésiologie", "& surf."]} className="text-h2" />
-          <p className="measure text-meta mt-6 leading-relaxed">
-            Pour la kinésiologie, le surf ou toute autre question — écrivez-nous sur
-            WhatsApp. On préfère l'écrit pour prendre le temps de bien vous répondre,
-            toujours sous 24h.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <PrimaryCta
-              label={`WhatsApp Maïka — ${WHATSAPP.maika.phone}`}
-              href={waLink(WHATSAPP.maika)}
-            />
-            <PrimaryCta
-              label={`WhatsApp Clara D. — ${WHATSAPP.claraD.phone}`}
-              href={waLink(WHATSAPP.claraD)}
-            />
-            <PrimaryCta
-              label={`WhatsApp — ${WHATSAPP.general.phone}`}
-              href={waLink(WHATSAPP.general)}
-            />
+        {/* Domicile / Océan / Kiné / Surf → Square (rendez-vous) */}
+        <Reveal delay={0.08}>
+          <div className="border-filet flex h-full flex-col border p-8">
+            <Eyebrow className="text-meta">Domicile · Océan · Kiné · Surf</Eyebrow>
+            <h2 className="font-display mt-3 text-2xl font-bold">Cours sur rendez-vous</h2>
+            <p className="text-meta mt-3 flex-1 leading-relaxed">
+              Cours à domicile, initiation océan, kinésiologie et surf — partout sur la Côte
+              Basque. Choisissez votre créneau directement en ligne.
+            </p>
+            <div className="mt-6">
+              <PrimaryCta label="Réserver un rendez-vous" href={SQUARE_APPOINTMENTS_URL} />
+            </div>
           </div>
-        </div>
-      </section>
-    </>
+        </Reveal>
+      </div>
+    </section>
   );
 }

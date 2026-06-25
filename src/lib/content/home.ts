@@ -1,11 +1,5 @@
 /** PAGE 1 — ACCUEIL (Annexe A, copy exact, zéro émoji). */
-import {
-  CITIES,
-  RESERVATION_HREF,
-  SQUARE_BOOKING_URL,
-  WHATSAPP,
-  waLink,
-} from "@/lib/constants";
+import { CITIES, SQUARE_BOOKING_URL, SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
 import type { CtaButton, IllustratedSection, Offer } from "@/lib/content/types";
 
 export const HOME = {
@@ -121,14 +115,9 @@ export const HOME = {
         kind: "primary",
       },
       {
-        label: "Réserver un cours à domicile",
-        href: `${RESERVATION_HREF}?type=domicile#en-ligne`,
+        label: "Réserver un rendez-vous",
+        href: SQUARE_APPOINTMENTS_URL,
         kind: "outline",
-      },
-      {
-        label: "WhatsApp — on vous répond",
-        href: waLink(WHATSAPP.general),
-        kind: "whatsapp",
       },
     ] satisfies CtaButton[],
   },

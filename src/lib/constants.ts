@@ -11,9 +11,8 @@ export const SITE = {
   instagramHandle: "@natationcotebasque",
 } as const;
 
-/** Vidéo hero (déjà hébergée). */
-export const HERO_VIDEO_URL =
-  "https://www.natationcotebasque.fr/wp-content/uploads/2026/01/Natation-des-3-ans-1.mp4";
+/** Vidéo hero (page d'accueil) — fichier local dans /public/videos. */
+export const HERO_VIDEO_URL = "/videos/accueil.mp4";
 
 /** Adresse du bassin privé (Bidart). */
 export const POOL_ADDRESS = {
@@ -24,38 +23,6 @@ export const POOL_ADDRESS = {
   note: "petit parking sur la droite, bâtiment en face",
   full: "1415 av. de Biarritz, Bidart (Chambre d'hôtes Irigoyen) — petit parking sur la droite, bâtiment en face.",
 } as const;
-
-type WhatsAppEntry = { phone: string; number: string; message: string };
-
-export const WHATSAPP = {
-  general: {
-    phone: "07 56 85 18 29",
-    number: "33756851829",
-    message: "Bonjour, je souhaite des renseignements sur vos cours de natation.",
-  },
-  maika: {
-    phone: "06 65 57 37 40",
-    number: "33665573740",
-    message:
-      "Bonjour Maïka, je souhaite des informations sur une séance de kinésiologie (peur de l'eau).",
-  },
-  claraD: {
-    phone: "06 77 83 66 04",
-    number: "33677836604",
-    message: "Bonjour Clara, je souhaite des informations sur un cours de surf.",
-  },
-  // Numéro d'Emma (fondatrice) — À CONFIRMER : utilise le numéro général par défaut.
-  emma: {
-    phone: "07 56 85 18 29",
-    number: "33756851829",
-    message: "Bonjour Emma, je souhaite des renseignements sur vos cours de natation.",
-  },
-} satisfies Record<string, WhatsAppEntry>;
-
-/** Construit un lien wa.me avec message pré-rempli. */
-export function waLink(entry: WhatsAppEntry): string {
-  return `https://wa.me/${entry.number}?text=${encodeURIComponent(entry.message)}`;
-}
 
 /** Villes du Pays Basque desservies (marquee + SEO). */
 export const CITIES = [
@@ -87,9 +54,13 @@ export const NAV_LINKS = [
 
 export const RESERVATION_HREF = "/reservation";
 
-/** Réservation bassin privé — application externe Square. */
+/** Réservation BASSIN PRIVÉ — Square (cours collectifs / classes). */
 export const SQUARE_BOOKING_URL =
   "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LJ3931E19TX0B/classes?buttonTextColor=ffffff&color=000000&referrer=so";
+
+/** Réservation RENDEZ-VOUS — Square (domicile, océan, kiné, surf). */
+export const SQUARE_APPOINTMENTS_URL =
+  "https://book.squareup.com/appointments/g7n1j9vp7a40l8/location/LJ3931E19TX0B/services";
 
 /** Liens legacy (référence — remplacés par les flux natifs). */
 export const LEGACY = {

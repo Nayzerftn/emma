@@ -1,6 +1,5 @@
 import { Masthead } from "@/components/site/Masthead";
 import { Footer } from "@/components/site/Footer";
-import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import { ScrollProgress } from "@/components/motion/ScrollProgress";
 
@@ -12,7 +11,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <Masthead />
       <main id="top">{children}</main>
       <Footer />
-      <FloatingWhatsApp />
     </>
   );
 }

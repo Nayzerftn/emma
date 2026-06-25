@@ -1,5 +1,5 @@
 /** PAGE 2 — ÉQUIPE (Annexe A). Le roster vient de team.ts. */
-import { RESERVATION_HREF, SQUARE_BOOKING_URL, WHATSAPP, waLink } from "@/lib/constants";
+import { SQUARE_BOOKING_URL, SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
 export const EQUIPE = {
@@ -14,19 +14,14 @@ export const EQUIPE = {
     text: "Cours de natation à Bayonne, Anglet, Biarritz — à domicile ou en bassin privé. On vous répond sous 24h.",
     buttons: [
       {
-        label: "Réserver à domicile",
-        href: `${RESERVATION_HREF}?type=domicile#en-ligne`,
+        label: "Réserver un rendez-vous",
+        href: SQUARE_APPOINTMENTS_URL,
         kind: "primary",
       },
       {
         label: "Réserver en bassin privé",
         href: SQUARE_BOOKING_URL,
         kind: "outline",
-      },
-      {
-        label: "WhatsApp — toute question",
-        href: waLink(WHATSAPP.general),
-        kind: "whatsapp",
       },
     ] satisfies CtaButton[],
   },

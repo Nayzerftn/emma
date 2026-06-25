@@ -6,7 +6,6 @@
  * Règle copy : toujours écrire « fondatrice de Natation Côte Basque » en entier.
  * Thaïs = championne du monde de sauvetage côtier. Zéro émoji.
  */
-import { WHATSAPP } from "@/lib/constants";
 
 export type Service = "bassin" | "domicile" | "ocean" | "kine" | "surf";
 
@@ -100,7 +99,7 @@ export const TEAM: TeamMember[] = [
     role: "Surf · Naturopathie · Réflexologie",
     bio: "Surfeuse talentueuse et professeure de surf, naturopathe et réflexologue. Elle développe une approche globale du bien-être à travers le surf : apprentissage, plaisir et reconnexion au corps.",
     services: ["surf"],
-    whatsapp: WHATSAPP.claraD.number,
+    whatsapp: null,
     order: 7,
   },
   {
@@ -110,7 +109,7 @@ export const TEAM: TeamMember[] = [
     role: "Kinésiologue · Petite enfance",
     bio: "Kinésiologue certifiée, spécialisée dans l'accompagnement de la petite enfance. Elle travaille aussi en crèche et en MAM, avec une approche très douce centrée sur la sécurité émotionnelle des tout-petits dès 3 ans.",
     services: ["kine"],
-    whatsapp: WHATSAPP.maika.number,
+    whatsapp: null,
     order: 8,
   },
 ];

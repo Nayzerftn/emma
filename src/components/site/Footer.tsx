@@ -1,12 +1,5 @@
 import Link from "next/link";
-import {
-  CITIES,
-  NAV_LINKS,
-  RESERVATION_HREF,
-  SITE,
-  WHATSAPP,
-  waLink,
-} from "@/lib/constants";
+import { CITIES, NAV_LINKS, RESERVATION_HREF, SITE } from "@/lib/constants";
 
 const YEAR = new Date().getFullYear();
 
@@ -33,14 +26,9 @@ export function Footer() {
               >
                 Instagram
               </a>
-              <a
-                href={waLink(WHATSAPP.general)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="eyebrow underline-draw text-paper"
-              >
-                WhatsApp — {WHATSAPP.general.phone}
-              </a>
+              <Link href={RESERVATION_HREF} className="eyebrow underline-draw text-paper">
+                Réserver un cours
+              </Link>
             </div>
           </div>
 

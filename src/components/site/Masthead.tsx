@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV_LINKS, RESERVATION_HREF, SQUARE_BOOKING_URL } from "@/lib/constants";
+import {
+  NAV_LINKS,
+  RESERVATION_HREF,
+  SQUARE_BOOKING_URL,
+  SQUARE_APPOINTMENTS_URL,
+} from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -150,9 +155,9 @@ export function Masthead() {
             ))}
             <div className="mt-8 flex flex-col gap-3">
               <Button asChild variant="primary" size="lg" className="w-full">
-                <Link href={`${RESERVATION_HREF}?type=domicile#en-ligne`}>
-                  Réserver à domicile
-                </Link>
+                <a href={SQUARE_APPOINTMENTS_URL} target="_blank" rel="noopener noreferrer">
+                  Réserver un rendez-vous
+                </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="w-full">
                 <a href={SQUARE_BOOKING_URL} target="_blank" rel="noopener noreferrer">

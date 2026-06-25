@@ -1,8 +1,8 @@
 /** PAGE 5 — INITIATION OCÉAN (Annexe A). Réservation = lead en ligne (Flux B). */
-import { RESERVATION_HREF } from "@/lib/constants";
+import { SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const LEAD_HREF = `${RESERVATION_HREF}?type=ocean#en-ligne`;
+const LEAD_HREF = SQUARE_APPOINTMENTS_URL;
 
 export const OCEAN = {
   hero: {
