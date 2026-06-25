@@ -47,7 +47,7 @@ export default function ReservationPage() {
               Basque. Choisissez votre créneau directement en ligne.
             </p>
             <div className="mt-6">
-              <PrimaryCta label="Réserver un rendez-vous" href={SQUARE_APPOINTMENTS_URL} />
+              <PrimaryCta label="Réserver un rdv à domicile" href={SQUARE_APPOINTMENTS_URL} />
             </div>
           </div>
         </Reveal>

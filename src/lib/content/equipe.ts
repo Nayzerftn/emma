@@ -14,7 +14,7 @@ export const EQUIPE = {
     text: "Cours de natation à Bayonne, Anglet, Biarritz — à domicile ou en bassin privé. On vous répond sous 24h.",
     buttons: [
       {
-        label: "Réserver un rendez-vous",
+        label: "Réserver un rdv à domicile",
         href: SQUARE_APPOINTMENTS_URL,
         kind: "primary",
       },

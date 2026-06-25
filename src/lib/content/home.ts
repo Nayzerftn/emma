@@ -115,7 +115,7 @@ export const HOME = {
         kind: "primary",
       },
       {
-        label: "Réserver un rendez-vous",
+        label: "Réserver un rdv à domicile",
         href: SQUARE_APPOINTMENTS_URL,
         kind: "outline",
       },

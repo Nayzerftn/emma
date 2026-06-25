@@ -156,7 +156,7 @@ export function Masthead() {
             <div className="mt-8 flex flex-col gap-3">
               <Button asChild variant="primary" size="lg" className="w-full">
                 <a href={SQUARE_APPOINTMENTS_URL} target="_blank" rel="noopener noreferrer">
-                  Réserver un rendez-vous
+                  Réserver un rdv à domicile
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="w-full">
