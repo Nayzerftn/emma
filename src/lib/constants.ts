@@ -46,6 +46,9 @@ export function waLink(entry: WhatsAppEntry): string {
   return `https://wa.me/${entry.number}?text=${encodeURIComponent(entry.message)}`;
 }
 
+/** Communauté WhatsApp — annonces des nouveaux créneaux en avant-première. */
+export const WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FGVnRbY2T4n9hTxPKayCRb";
+
 /** Villes du Pays Basque desservies (marquee + SEO). */
 export const CITIES = [
   "Bayonne",

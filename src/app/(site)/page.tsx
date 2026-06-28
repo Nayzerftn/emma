@@ -13,6 +13,7 @@ import {
   Testimonials,
   TrustBand,
 } from "@/components/site/blocks";
+import { CommunityBand } from "@/components/site/CommunityBand";
 import { HOME } from "@/lib/content/home";
 import { getFaq, getTestimonials } from "@/lib/content/resolvers";
 import { pageMetadata, sportsActivityLocationLd, faqPageLd } from "@/lib/seo";
@@ -81,6 +82,8 @@ export default async function HomePage() {
       />
 
       <Testimonials items={testimonials} />
+
+      <CommunityBand />
 
       <FaqSection items={faq} titleLines={["Vos questions,", "nos réponses."]} />
 
