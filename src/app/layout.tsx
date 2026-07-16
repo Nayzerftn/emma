@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import { Toaster } from "sonner";
 import { env } from "@/lib/env";
 import { PAGE_META } from "@/lib/content/meta";
+import { MetaPixel } from "@/components/site/MetaPixel";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={montserrat.variable}>
       <body className="bg-paper text-ink min-h-screen antialiased">
+        <MetaPixel />
         {children}
         <Toaster
           position="bottom-center"
