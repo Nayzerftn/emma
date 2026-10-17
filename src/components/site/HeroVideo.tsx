@@ -28,7 +28,8 @@ export function HeroVideo({
 
   // Entrée orchestrée au chargement : eyebrow → lignes du titre → sous-titre → CTA.
   const rise = (i: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 28, filter: "blur(6px)" },
+    // `initial` identique serveur/client (sinon échec d'hydratation) ; `reduce` ne touche que la durée.
+    initial: { opacity: 0, y: 28, filter: "blur(6px)" },
     animate: { opacity: 1, y: 0, filter: "blur(0px)" },
     transition: {
       duration: reduce ? 0 : 0.85,

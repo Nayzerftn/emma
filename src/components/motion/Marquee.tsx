@@ -28,20 +28,17 @@ export function Marquee({
     </div>
   );
 
-  if (reduce) {
-    return (
-      <div className="no-scrollbar overflow-x-auto" role="list" aria-label="Villes desservies">
-        <div className="flex w-max items-center">{Row}</div>
-      </div>
-    );
-  }
-
+  // Même markup serveur/client (sinon échec d'hydratation) : en mouvement réduit, le ruban reste fixe.
   return (
     <div className="overflow-hidden" aria-label="Villes desservies">
       <motion.div
         className="flex w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: durationSeconds, ease: "linear", repeat: Infinity }}
+        animate={reduce ? { x: "0%" } : { x: ["0%", "-50%"] }}
+        transition={
+          reduce
+            ? { duration: 0 }
+            : { duration: durationSeconds, ease: "linear", repeat: Infinity }
+        }
       >
         {Row}
         {Row}

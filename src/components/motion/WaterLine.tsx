@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 const PATH =
@@ -18,7 +18,18 @@ export function WaterLine({ className }: { className?: string }) {
     target: ref,
     offset: ["start 95%", "end 55%"],
   });
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  // Même rendu serveur/client (sinon échec d'hydratation) : en mouvement réduit,
+  // le trait est posé entier après le montage au lieu de suivre le scroll.
+  const pathLength = useMotionValue(0);
+  useEffect(() => {
+    if (reduce) {
+      pathLength.set(1);
+      return;
+    }
+    pathLength.set(progress.get());
+    return progress.on("change", (v) => pathLength.set(v));
+  }, [reduce, progress, pathLength]);
 
   return (
     <div ref={ref} aria-hidden className={cn("text-filet w-full", className)}>
@@ -33,7 +44,7 @@ export function WaterLine({ className }: { className?: string }) {
           stroke="currentColor"
           strokeWidth={1.5}
           strokeLinecap="round"
-          style={{ pathLength: reduce ? 1 : pathLength }}
+          style={{ pathLength }}
         />
       </svg>
     </div>

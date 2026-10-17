@@ -17,4 +17,18 @@ Object.defineProperty(window, "matchMedia", {
   }),
 });
 
+// jsdom n'implémente pas IntersectionObserver — requis par motion (whileInView).
+class IntersectionObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+}
+Object.defineProperty(window, "IntersectionObserver", {
+  writable: true,
+  value: IntersectionObserverStub,
+});
+
 afterEach(() => cleanup());

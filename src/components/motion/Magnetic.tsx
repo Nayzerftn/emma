@@ -24,16 +24,14 @@ export function Magnetic({
   const sx = useSpring(x, { stiffness: 200, damping: 15, mass: 0.1 });
   const sy = useSpring(y, { stiffness: 200, damping: 15, mass: 0.1 });
 
-  if (reduce) {
-    return <span className={cn("inline-block", className)}>{children}</span>;
-  }
-
+  // Même markup serveur/client (pas de branche sur `reduce`) : on coupe juste l'effet.
   return (
     <motion.span
       ref={ref}
       style={{ x: sx, y: sy }}
       className={cn("inline-block", className)}
       onMouseMove={(e) => {
+        if (reduce) return;
         const rect = ref.current?.getBoundingClientRect();
         if (!rect) return;
         x.set((e.clientX - (rect.left + rect.width / 2)) * strength);
