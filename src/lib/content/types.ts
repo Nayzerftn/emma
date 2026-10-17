@@ -13,6 +13,8 @@ export type Offer = {
   /** Titre, lignes séparées (les "/" du brief = retours à la ligne). */
   titleLines: readonly string[];
   text: string;
+  /** Ligne courte mise en avant sous le texte (ex. publics, disciplines). */
+  detail?: string;
   href: string;
   photo: PhotoKey;
 };

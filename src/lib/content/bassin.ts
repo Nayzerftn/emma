@@ -1,15 +1,19 @@
 /** PAGE 3 — BASSIN PRIVÉ (Annexe A). */
-import { SQUARE_BOOKING_URL } from "@/lib/constants";
+import { SQUARE_ANGLET_URL, SQUARE_BIDART_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const BOOK_HREF = SQUARE_BOOKING_URL;
+/** Deux bassins = deux liens de réservation directe. */
+const BOOK_BUTTONS = [
+  { label: "Réserver à Bidart", href: SQUARE_BIDART_URL, kind: "primary" },
+  { label: "Réserver à Anglet", href: SQUARE_ANGLET_URL, kind: "primary" },
+] satisfies CtaButton[];
 
 export const BASSIN = {
   hero: {
-    eyebrow: "Bassin privé · Bidart (limite Biarritz) · Toute l'année",
-    titleLines: ["Un bassin", "rien que", "pour vous."],
-    text: "Une piscine privée, couverte et chauffée, 2 couloirs de 20 mètres, sans foule ni bruit. Pour les enfants : mini-groupes de 3 maximum, par niveau. Pour les adultes : séances individuelles, personnalisées selon vos objectifs. Toute l'année.",
-    cta: { label: "Réserver ici", href: BOOK_HREF },
+    eyebrow: "Bassin privé · Bidart (limite Biarritz) & Anglet · Toute l'année",
+    titleLines: ["Deux bassins", "rien que", "pour vous."],
+    text: "Un bassin privé à Bidart avec deux couloirs de 20 mètres, couvert et chauffé. Un bassin privé à Anglet de 30 mètres carrés, couvert et chauffé. Eau à 33°C à Anglet, 26°C à Bidart. Le bassin d'Anglet est pensé pour le public sensible : bébé nageur, aquaphobie, aquagym, Niveau 1 enfant. Le bassin de Bidart accueille les enfants niveaux 1, 2 et 3, le perfectionnement, les ados, les adultes et l'apnée.",
+    buttons: BOOK_BUTTONS,
   },
   enfants: {
     eyebrow: "Enfants · 3 niveaux · dès 3 ans",
@@ -35,28 +39,51 @@ export const BASSIN = {
     ],
   },
   adultes: {
-    eyebrow: "Adultes · séances individuelles",
+    eyebrow: "Adultes · séances individualisées",
     titleLines: ["Chaque cours", "adapté à vous."],
-    text: "Pour les adultes, des séances individuelles sur-mesure : 1 couloir rien que pour vous. Remise en forme, perte de poids, douleur dorsale, apprentissage, perfectionnement, triathlon, nouvelle nage, reprise — ou juste le plaisir de retrouver l'eau.",
+    text: "Cours de 30 à 45 minutes, 3 à 4 personnes maximum.",
+    formats: [
+      {
+        title: "Apprentissage",
+        text: "Pour les adultes ne sachant pas nager 25 mètres sans s'arrêter.",
+      },
+      {
+        title: "Perfectionnement",
+        text: "Pour les adultes sachant déjà nager 25 mètres sans s'arrêter.",
+      },
+      {
+        title: "Apnée",
+        text: "Pour les surfeurs de gros, les personnes souhaitant être plus à l'aise en océan, ou tout simplement pour les bienfaits physiologiques de l'apnée.",
+      },
+    ],
   },
   infos: [
     {
       label: "Lieu",
       value:
-        "On se situe à Bidart, vous recevrez l'adresse exacte lors de la réservation.",
+        "On se situe à Bidart et à Anglet, vous recevrez l'adresse exacte lors de la réservation.",
     },
     { label: "Disponibilité", value: "Tous les week-ends, toute l'année" },
     { label: "Enfants", value: "Mini-groupes de 3 maximum, même niveau" },
-    { label: "Adultes", value: "Séances individuelles, 1 couloir" },
+    { label: "Adultes", value: "Séances individualisées, personnalisées" },
     { label: "Réservation", value: "Directement en ligne · réponse sous 24h" },
     { label: "Annulation", value: "Sans frais jusqu'à 48h avant" },
   ],
-  ctaMid: { label: "Réserver ici", href: BOOK_HREF },
+  ctaMid: BOOK_BUTTONS,
+  apnee: {
+    eyebrow: "Apnée",
+    titleLines: ["Nouveaux créneaux", "à Bidart."],
+    items: [
+      { title: "Apnée débutant", text: "Adulte / ado." },
+      { title: "Apnée avancé", text: "À venir — novembre 2026." },
+      { title: "Forfait apnée enfant", text: "À venir — novembre 2026." },
+    ],
+  },
   finalCta: {
     titleLines: ["Réservez", "votre créneau."],
-    text: "Bassin privé couvert et chauffé à Bidart. Enfants en mini-groupes, adultes en individuel. Toute l'année.",
+    text: "Bassin privé couvert et chauffé à Bidart et à Anglet. Enfants en mini-groupes, adultes en individuel. Toute l'année.",
     buttons: [
-      { label: "Réserver en bassin privé", href: BOOK_HREF, kind: "primary" },
+      ...BOOK_BUTTONS,
       { label: "Voir l'équipe", href: "/equipe", kind: "outline" },
     ] satisfies CtaButton[],
   },

@@ -1,8 +1,20 @@
 /** PAGE 1 — ACCUEIL (Annexe A, copy exact, zéro émoji). */
-import { CITIES, SQUARE_BOOKING_URL, SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
+import {
+  CITIES,
+  SQUARE_ANGLET_URL,
+  SQUARE_APPOINTMENTS_URL,
+  SQUARE_BIDART_URL,
+  SQUARE_OCEAN_URL,
+} from "@/lib/constants";
 import type { CtaButton, IllustratedSection, Offer } from "@/lib/content/types";
 
 export const HOME = {
+  /** Bandeau tout en haut de l'accueil, avant le hero. */
+  announcement: {
+    label: "Nouveau 2026",
+    text: "Cours d'apnée, bébé nageur, cours spécial aquaphobie, cours ado, aquagym.",
+  },
+
   hero: {
     eyebrow: "Bayonne · Anglet · Biarritz · toute la Côte Basque",
     titleLines: ["La première", "école de natation", "de la Côte Basque"],
@@ -28,9 +40,18 @@ export const HOME = {
     {
       eyebrow: "Bassin privé · Bidart",
       titleLines: ["Cours en bassin", "privé à Bidart"],
-      text: "Une piscine privée, couverte et chauffée, rien que pour nous. Mini-groupes de 3 maximum par niveau pour les enfants ; séances personnalisées pour les adultes, adaptées à vos besoins.",
+      text: "Une piscine privée, couverte et chauffée, rien que pour nous. Mini-groupes de 3 maximum par niveau pour les enfants ; séances personnalisées ou un petit groupe pour les adultes, adaptées à vos besoins.",
+      detail: "Apprentissage, perfectionnement : enfant, ado, adulte. Cours d'apnée.",
       href: "/bassin-prive",
       photo: "bassin",
+    },
+    {
+      eyebrow: "Bassin privé · Anglet",
+      titleLines: ["Cours en bassin", "privé à Anglet"],
+      text: "Un bassin plus doux, pensé pour le public sensible : bébé nageur, aquaphobie, aquagym, Niveau 1 enfant. Piscine couverte et chauffée à 33°C, pour commencer dans un environnement plus cocon.",
+      detail: "Bébé nageur, aquaphobie, aquagym, Niveau 1 enfant.",
+      href: "/bassin-prive",
+      photo: "bassinAnglet",
     },
     {
       eyebrow: "À domicile · Pays Basque",
@@ -40,16 +61,17 @@ export const HOME = {
       photo: "domicile",
     },
     {
-      eyebrow: "Initiation océan",
+      eyebrow: "Océan",
       titleLines: ["Nager en conscience", "dans l'océan"],
-      text: "L'étape après la piscine. Courants, vagues, lecture de l'eau — tout ce qu'on n'apprend pas dans un bassin. Pour les enfants comme pour les adultes, au Port-Vieux de Biarritz ou aux plages d'Anglet.",
+      text: "L'étape après la piscine. Courants, vagues, lecture de l'eau — tout ce qu'on n'apprend pas dans un bassin. Pour les enfants comme pour les adultes, sur toutes les plages basques.",
+      detail: "Initiation océan, et longe côte.",
       href: "/initiation-ocean",
       photo: "ocean",
     },
     {
-      eyebrow: "Kinésiologie · peur de l'eau",
-      titleLines: ["La peur de l'eau ?", "Notre spécialité"],
-      text: "Un enfant qui pleure avant la piscine, un adulte qui n'a jamais osé ? La peur de l'eau n'a pas d'âge — et on peut la dépasser. Notre kinésiologue lève les blocages en douceur. 90% de nos nageurs débloquent leurs appréhensions dès la première séance, petits comme grands.",
+      eyebrow: "Aquaphobie et kinésiologie",
+      titleLines: ["La peur de l'eau,", "notre spécialité"],
+      text: "La peur de l'eau n'a pas d'âge — on peut la dépasser. On propose des cours ados et adultes d'aquaphobie à Anglet, ainsi que des séances de kinésiologie pour débloquer les blocages émotionnels. 90% de nos nageurs débloquent leurs appréhensions dès la première séance, petits comme grands.",
       href: "/kinesiologie",
       photo: "kinesiologie",
     },
@@ -71,25 +93,30 @@ export const HOME = {
 
   illustrated: [
     {
-      quoteLines: ["Un bassin", "rien que", "pour vous."],
+      quoteLines: ["Un bassin", "à Bidart."],
       meta: "Bassin privé · Bidart",
       photo: "bassin",
     },
     {
+      quoteLines: ["Un bassin", "à Anglet."],
+      meta: "Bassin privé · Anglet",
+      photo: "bassinAnglet2",
+    },
+    {
       quoteLines: ["L'océan,", "ça s'apprend."],
-      meta: "Initiation océan · Port-Vieux Biarritz / Anglet",
+      meta: "Initiation océan",
       photo: "ocean",
     },
     {
-      quoteLines: ["La peur", "de l'eau —", "notre spécialité."],
-      meta: "Kinésiologie · Anglet, Bidart et domicile",
+      quoteLines: ["La peur", "de l'eau,", "notre spécialité."],
+      meta: "Kinésiologie, aquaphobie",
       photo: "kinesiologie",
     },
   ] satisfies IllustratedSection[],
 
   collective: {
     titleLines: ["On vous accompagne", "à chaque étape", "vers votre objectif."],
-    text: "Chacune a sa spécialité, on se complète, et c'est la collaboration entre nos expertes qui fait toute la qualité de Natation Côte Basque. On peut commencer par une séance de kinésiologie avec Maïka pour débloquer la peur, continuer avec des cours en bassin privé avec Oïana, passer aux initiations en océan, puis finir par du surf avec Clara une fois à l'aise.",
+    text: "Chacune a sa spécialité, on se complète, et c'est la collaboration entre nos expertes qui fait toute la qualité de Natation Côte Basque. Une séance de kinésiologie avec Maïka pour débloquer la peur, des cours en bassin privé avec Oïana, des initiations en océan avec Otxanda, puis du surf avec Clara — on vous accompagne du tout début jusqu'à l'aisance totale.",
   },
 
   trust: [
@@ -107,15 +134,25 @@ export const HOME = {
 
   finalCta: {
     titleLines: ["Et si l'eau", "devenait", "un plaisir ?"],
-    text: "La première séance commence par un simple message. Bassin privé, domicile, initiation océan, surf ou peur de l'eau — enfant ou adulte, on trouve la bonne formule ensemble. On vous répond toujours sous 24h.",
+    text: "La première séance commence par un simple message. Bassin privé, domicile, océan, surf ou peur de l'eau — enfant ou adulte, on trouve la bonne formule ensemble. On vous répond toujours sous 24h.",
     buttons: [
       {
-        label: "Je réserve mon cours en bassin privé",
-        href: SQUARE_BOOKING_URL,
+        label: "Je réserve mon cours en bassin privé à Bidart",
+        href: SQUARE_BIDART_URL,
         kind: "primary",
       },
       {
-        label: "Réserver un rdv à domicile",
+        label: "Je réserve mon cours en bassin privé à Anglet",
+        href: SQUARE_ANGLET_URL,
+        kind: "primary",
+      },
+      {
+        label: "Je réserve un cours en océan",
+        href: SQUARE_OCEAN_URL,
+        kind: "outline",
+      },
+      {
+        label: "Réserver un cours à domicile",
         href: SQUARE_APPOINTMENTS_URL,
         kind: "outline",
       },

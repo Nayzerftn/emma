@@ -3,12 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  NAV_LINKS,
-  RESERVATION_HREF,
-  SQUARE_BOOKING_URL,
-  SQUARE_APPOINTMENTS_URL,
-} from "@/lib/constants";
+import { NAV_LINKS, RESERVATION_HREF, SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
+import { HOME } from "@/lib/content/home";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -63,6 +59,17 @@ export function Masthead() {
           overlay ? "bg-transparent" : "bg-paper/95 border-filet border-b backdrop-blur-sm",
         )}
       >
+        {pathname === "/" && (
+          <Link
+            href="/bassin-prive"
+            className="bg-ink text-paper block px-5 py-2 text-center text-[0.72rem] leading-snug tracking-[0.02em] md:text-[0.78rem]"
+          >
+            <span className="font-semibold uppercase tracking-[0.12em]">
+              « {HOME.announcement.label} »
+            </span>{" "}
+            — {HOME.announcement.text}
+          </Link>
+        )}
         <div className="shell flex h-16 items-center justify-between md:h-20">
           <Link
             href="/"
@@ -160,9 +167,7 @@ export function Masthead() {
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="w-full">
-                <a href={SQUARE_BOOKING_URL} target="_blank" rel="noopener noreferrer">
-                  Notre bassin privé
-                </a>
+                <Link href={RESERVATION_HREF}>Nos bassins privés</Link>
               </Button>
             </div>
           </nav>

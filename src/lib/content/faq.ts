@@ -17,28 +17,28 @@ export const FAQ_HOME: FaqItem[] = [
     page: "home",
     question: "Combien faut-il de séances ?",
     answer:
-      "On conseille d'en réserver 5 à 10 à l'avance — on est souvent complet. Annulation sans frais jusqu'à 48h avant.",
+      "On conseille d'en réserver 5 à 10 à l'avance. Annulation sans frais jusqu'à 48h avant.",
     order: 2,
   },
   {
     page: "home",
     question: "Vous vous déplacez jusqu'où ?",
     answer:
-      "Sur tout le Pays Basque : Bayonne, Anglet, Biarritz, Bidart, Guéthary, Saint-Jean-de-Luz, Hendaye, Ciboure et bien plus.",
+      "Sur tout le Pays Basque.",
     order: 3,
   },
   {
     page: "home",
     question: "C'est pour les adultes aussi ?",
     answer:
-      "Absolument. Enfants dès 3 ans et adultes de tous niveaux — débutants, perfectionnement, peur de l'eau, remise en forme.",
+      "Absolument, dès 3 ans.",
     order: 4,
   },
   {
     page: "home",
     question: "C'est disponible toute l'année ?",
     answer:
-      "Oui — bassin privé, cours à domicile, initiation océan, kinésiologie et surf, toute l'année.",
+      "Oui — bassin privé, cours à domicile, océan, kinésiologie et surf, toute l'année. Également bébé nageur, aquaphobie et aquagym au bassin d'Anglet.",
     order: 5,
   },
   {
@@ -55,40 +55,40 @@ export const FAQ_RESERVATION: FaqItem[] = [
     page: "reservation",
     question: "Quel est le délai de réponse ?",
     answer:
-      "On s'engage à répondre sous 24h. On échange par WhatsApp plutôt que par téléphone : ça nous laisse le temps de bien répondre à chacun.",
+      "On s'engage à répondre sous 24h.",
     order: 1,
   },
   {
     page: "reservation",
     question: "Quel matériel faut-il ?",
-    answer: "Juste un maillot et des lunettes. On s'occupe du reste.",
+    answer: "Juste un maillot et des lunettes.",
     order: 2,
   },
   {
     page: "reservation",
     question: "Peut-on annuler un cours ?",
-    answer: "Oui, annulation sans frais jusqu'à 48h avant.",
+    answer: "Oui, sans frais jusqu'à 48h avant.",
     order: 3,
   },
   {
     page: "reservation",
     question: "C'est pour les adultes aussi ?",
     answer:
-      "Bien sûr. Enfants dès 3 ans et adultes de tous niveaux, partout sur la Côte Basque.",
+      "Enfants dès 3 ans et adultes de tous niveaux.",
     order: 4,
   },
   {
     page: "reservation",
     question: "Comment choisit-on notre professeure ?",
     answer:
-      "On vous propose la plus adaptée à votre profil. Si vous avez une préférence, dites-le nous.",
+      "On vous propose la plus adaptée à votre profil.",
     order: 5,
   },
   {
     page: "reservation",
     question: "Combien de séances ?",
     answer:
-      "5 à 10 à l'avance — on est souvent complet. Plus tôt vous réservez, plus de choix de créneaux.",
+      "5 à 10 à l'avance — on est souvent complet.",
     order: 6,
   },
 ];

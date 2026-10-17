@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Reveal } from "@/components/motion/Reveal";
 import { DisplayTitle, Eyebrow, InfoList } from "@/components/site/Typography";
 import { EditorialImage } from "@/components/site/EditorialImage";
-import { PrimaryCta } from "@/components/site/CtaButtons";
-import { NumberedList, SectionHeader } from "@/components/site/blocks";
+import { CtaButtons } from "@/components/site/CtaButtons";
+import { CtaBlock, FeatureList, NumberedList, SectionHeader } from "@/components/site/blocks";
 import { BASSIN } from "@/lib/content/bassin";
 import { PHOTOS } from "@/lib/photos";
 import { pageMetadata } from "@/lib/seo";
@@ -20,7 +20,7 @@ export default function BassinPrivePage() {
           <p className="measure text-meta mt-6 text-lg leading-relaxed">
             {BASSIN.hero.text}
           </p>
-          <PrimaryCta className="mt-8" label={BASSIN.hero.cta.label} href={BASSIN.hero.cta.href} />
+          <CtaButtons className="mt-8" buttons={BASSIN.hero.buttons} />
         </Reveal>
         <Reveal delay={0.1}>
           <EditorialImage
@@ -53,10 +53,28 @@ export default function BassinPrivePage() {
               intro={BASSIN.adultes.text}
             />
           </Reveal>
+          <div className="mt-12">
+            <FeatureList items={BASSIN.adultes.formats} />
+          </div>
           <InfoList items={BASSIN.infos} className="mt-12" />
-          <PrimaryCta className="mt-10" label={BASSIN.ctaMid.label} href={BASSIN.ctaMid.href} />
+          <CtaButtons className="mt-10" buttons={BASSIN.ctaMid} />
         </div>
       </section>
+
+      <section className="shell py-16 md:py-24">
+        <Reveal>
+          <SectionHeader eyebrow={BASSIN.apnee.eyebrow} titleLines={BASSIN.apnee.titleLines} />
+        </Reveal>
+        <div className="mt-12">
+          <FeatureList items={BASSIN.apnee.items} />
+        </div>
+      </section>
+
+      <CtaBlock
+        titleLines={BASSIN.finalCta.titleLines}
+        text={BASSIN.finalCta.text}
+        buttons={BASSIN.finalCta.buttons}
+      />
     </>
   );
 }

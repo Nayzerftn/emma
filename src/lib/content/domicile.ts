@@ -8,7 +8,7 @@ export const DOMICILE = {
   hero: {
     eyebrow: "Cours à domicile · Côte Basque · Toute l'année",
     titleLines: ["On vient", "chez vous."],
-    text: "Pas de trajet, pas de vestiaire bondé. Votre professeure arrive chez vous, dans votre piscine. Pour les enfants, le cadre rassurant de la maison ; pour les adultes, l'intimité pour progresser à l'abri des regards. Partout sur la Côte Basque.",
+    text: "Pas de piscine accessible près de chez vous ? Pas de créneau compatible avec votre emploi du temps ? Votre professeure vient à vous. Pas de trajet, pas de vestiaire bondé — juste votre piscine et la bonne experte. Pour les enfants, le cadre rassurant de la maison ; pour les adultes, l'intimité pour progresser à l'abri des regards.",
     cta: { label: "Réserver ici", href: LEAD_HREF },
   },
   steps: {

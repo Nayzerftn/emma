@@ -1,14 +1,14 @@
-/** PAGE 5 — INITIATION OCÉAN (Annexe A). Réservation = lead en ligne (Flux B). */
-import { SQUARE_APPOINTMENTS_URL } from "@/lib/constants";
+/** PAGE 5 — OCÉAN : initiation océan + longe côte. Réservation = Square océan. */
+import { SQUARE_OCEAN_URL } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
-const LEAD_HREF = SQUARE_APPOINTMENTS_URL;
+const LEAD_HREF = SQUARE_OCEAN_URL;
 
 export const OCEAN = {
   hero: {
-    eyebrow: "Initiation océan · Port-Vieux Biarritz / Anglet · Toute l'année",
+    eyebrow: "Plages de Biarritz, Bidart, Guéthary, Hendaye · Toute l'année",
     titleLines: ["L'océan,", "ça s'apprend."],
-    text: "Pour tous ceux, enfants comme adultes, qui ont envie de nager en conscience dans l'océan. L'étape après la piscine — tout ce qu'on n'apprend pas dans un bassin.",
+    text: "Pour tous ceux, enfants comme adultes, qui ont envie de nager en conscience dans l'océan. L'étape après la piscine — tout ce qu'on n'apprend pas dans un bassin. Avec Otxanda, notre spécialiste de l'océan, bilingue français/basque.",
     cta: { label: "Réserver ici", href: LEAD_HREF },
   },
   learn: {
@@ -37,9 +37,22 @@ export const OCEAN = {
       { label: "Pour qui", value: "Enfants et adultes" },
       {
         label: "Lieux",
-        value: "Port-Vieux de Biarritz ou plages d'Anglet — selon météo",
+        value: "Plages de Biarritz, Bidart, Guéthary, Hendaye — selon météo",
       },
       { label: "Réservation", value: "En ligne · réponse sous 24h" },
+    ],
+    cta: { label: "Réserver ici", href: LEAD_HREF },
+  },
+  longeCote: {
+    eyebrow: "Longe côte",
+    titleLines: ["Une autre façon", "de découvrir l'océan."],
+    text: "À un rythme plus doux, pour partager des moments entre habitants du Pays Basque — une discipline très complète, en plus de sa dimension sociale.",
+    infos: [
+      {
+        label: "Lieu de rendez-vous",
+        value:
+          "Plage confirmée selon les conditions océaniques et météorologiques — peut être variable d'une semaine à l'autre.",
+      },
     ],
     cta: { label: "Réserver ici", href: LEAD_HREF },
   },

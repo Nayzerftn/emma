@@ -9,7 +9,7 @@ export const SURF = {
   hero: {
     eyebrow: "Cours de surf · Toute la Côte Basque · Toute l'année",
     titleLines: ["Le surf,", "à votre", "rythme."],
-    text: "Pour la première vague ou pour se réconcilier avec l'océan. Avec Clara D. — surfeuse, naturopathe, réflexologue — le surf devient bien plus qu'un sport : une reconnexion. Pour tous les âges.",
+    text: "Vous vivez sur la Côte Basque mais vous n'avez jamais surfé. Vous avez essayé mais l'océan vous intimide encore. Ou vous surfez déjà et vous voulez progresser vraiment. Avec Clara D. — surfeuse, naturopathe, réflexologue — le surf devient une reconnexion. Pour tous les âges.",
     cta: { label: CLARA_CTA, href: CLARA_HREF },
   },
   formules: {

@@ -115,6 +115,11 @@ export function OfferRow({ offer, index }: { offer: Offer; index: number }) {
           <Eyebrow className="mb-3">{offer.eyebrow}</Eyebrow>
           <DisplayTitle lines={offer.titleLines} className="text-h2" />
           <p className="measure text-meta mt-5 leading-relaxed">{offer.text}</p>
+          {offer.detail && (
+            <p className="measure text-ink mt-4 font-semibold leading-relaxed">
+              {offer.detail}
+            </p>
+          )}
           <Link
             href={offer.href}
             className="eyebrow underline-draw text-ink mt-6 inline-block"
@@ -293,6 +298,40 @@ export function FeatureList({
         </li>
       ))}
     </ul>
+  );
+}
+
+/* ── Parcours en étapes reliées par des flèches ───────────────── */
+function Arrow({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className={cn("size-6 shrink-0", className)}>
+      <path d="M4 12h15m-5-5 5 5-5 5" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function StepPath({
+  steps,
+}: {
+  steps: readonly { title: string; text?: string }[];
+}) {
+  return (
+    <ol className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+      {steps.map((step, i) => (
+        <li key={step.title} className="flex flex-col gap-3 lg:flex-1 lg:flex-row lg:items-center">
+          <Reveal delay={i * 0.06} className="border-ink/80 flex-1 self-stretch border p-5">
+            <span className="seq-number text-meta/50 text-2xl">0{i + 1}</span>
+            <h3 className="font-display mt-2 text-lg font-bold tracking-[-0.01em]">
+              {step.title}
+            </h3>
+            {step.text && <p className="text-meta mt-2 leading-relaxed">{step.text}</p>}
+          </Reveal>
+          {i < steps.length - 1 && (
+            <Arrow className="text-ink mx-auto rotate-90 lg:mx-0 lg:rotate-0" />
+          )}
+        </li>
+      ))}
+    </ol>
   );
 }
 

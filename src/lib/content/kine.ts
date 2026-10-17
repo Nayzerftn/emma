@@ -1,5 +1,8 @@
-/** PAGE 6 — KINÉSIOLOGIE (Annexe A). Réservation = WhatsApp Maïka. Aucun prix. */
-import { WHATSAPP, waLink } from "@/lib/constants";
+/**
+ * PAGE 6 — AQUAPHOBIE (ex-kinésiologie). Deux volets : cours d'aquaphobie au
+ * bassin d'Anglet (Square), puis kinésiologie avec Maïka si besoin (WhatsApp).
+ */
+import { SQUARE_ANGLET_URL, WHATSAPP, waLink } from "@/lib/constants";
 import type { CtaButton } from "@/lib/content/types";
 
 const MAIKA_CTA = `WhatsApp Maïka — ${WHATSAPP.maika.phone}`;
@@ -7,10 +10,26 @@ const MAIKA_HREF = waLink(WHATSAPP.maika);
 
 export const KINE = {
   hero: {
-    eyebrow: "Kinésiologie · peur de l'eau · Anglet, Bidart et domicile",
+    eyebrow: "Aquaphobie et kinésiologie · Anglet, Bidart et domicile",
     titleLines: ["La peur", "de l'eau ?", "Notre spécialité."],
     text: "Certains enfants pleurent avant d'entrer dans l'eau. Certains adultes n'ont jamais osé. Ce n'est pas une fatalité — c'est un blocage, et il se lève. 90% de nos élèves, petits comme grands, débloquent leurs appréhensions dès la première séance.",
     cta: { label: MAIKA_CTA, href: MAIKA_HREF },
+  },
+  volets: {
+    eyebrow: "Deux volets",
+    items: [
+      {
+        n: "01",
+        title: "Cours d'aquaphobie en bassin (Anglet)",
+        text: "Dans un premier temps, des cours dans un bassin couvert et chauffé à Anglet, en mini-groupes de 3 — vraiment en douceur, spécifique aux besoins de chacun. On avance à votre rythme, dans un bassin qui est un peu en mode cocon.",
+      },
+      {
+        n: "02",
+        title: "Séance de kinésiologie avec Maïka (si besoin)",
+        text: "Si c'est encore trop difficile, on propose de passer par la kinésiologie avec Maïka — donc hors de l'eau, pour débloquer le blocage au niveau émotionnel.",
+      },
+    ],
+    cta: { label: "Réserver à Anglet", href: SQUARE_ANGLET_URL },
   },
   what: {
     eyebrow: "Qu'est-ce que la kinésiologie ?",
@@ -46,6 +65,22 @@ export const KINE = {
       { label: "Pour qui", value: "Petits comme grands, toute l'année" },
     ],
     cta: { label: MAIKA_CTA, href: MAIKA_HREF },
+  },
+  parcours: {
+    eyebrow: "Le parcours type",
+    intro: "Pour ceux qui ont peur de l'eau :",
+    steps: [
+      {
+        title: "Kinésiologie avec Maïka",
+        text: "Débloquer l'émotionnel, hors de l'eau, si besoin.",
+      },
+      {
+        title: "Cours d'aquaphobie à Anglet",
+        text: "Bassin cocon, mini-groupe de 3.",
+      },
+      { title: "Apprentissage à Bidart" },
+      { title: "Océan" },
+    ],
   },
   finalCta: {
     titleLines: ["La peur de l'eau,", "c'est fini."],

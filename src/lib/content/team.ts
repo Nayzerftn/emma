@@ -12,7 +12,7 @@ export type Service = "bassin" | "domicile" | "ocean" | "kine" | "surf";
 export const SERVICE_LABELS: Record<Service, string> = {
   bassin: "Bassin privé",
   domicile: "À domicile",
-  ocean: "Initiation océan",
+  ocean: "Océan",
   kine: "Kinésiologie",
   surf: "Surf",
 };
@@ -43,16 +43,6 @@ export const TEAM: TeamMember[] = [
     order: 1,
   },
   {
-    slug: "elea",
-    name: "Eléa",
-    tagline: "Celle qui rend tout simple.",
-    role: "Secrétariat · Coordination",
-    bio: "Eléa orchestre toute l'organisation du collectif : planning, réservations, annulations, suivi des cours. Toujours disponible et réactive, c'est elle qui fait le lien entre les élèves et les professeures — et qui permet à toute l'équipe d'avancer ensemble.",
-    services: [],
-    whatsapp: null,
-    order: 2,
-  },
-  {
     slug: "oiana",
     name: "Oïana",
     tagline: "Maître-nageuse & spécialiste du mouvement.",
@@ -60,7 +50,7 @@ export const TEAM: TeamMember[] = [
     bio: "Ancienne nageuse de compétition à Biarritz pendant plus de dix ans, maître-nageuse et sauveteuse. Spécialisée dans la compréhension du corps et du mouvement, elle allie expertise technique et expérience du terrain.",
     services: ["bassin", "domicile", "ocean"],
     whatsapp: null,
-    order: 3,
+    order: 2,
   },
   {
     slug: "thais",
@@ -69,6 +59,16 @@ export const TEAM: TeamMember[] = [
     role: "Bassin · Domicile · Océan",
     bio: "Ancienne sauveteuse en équipe de France, maître-nageuse et championne du monde de sauvetage côtier — elle incarne une expertise aquatique de très haut niveau, du débutant au sportif confirmé.",
     services: ["bassin", "domicile", "ocean"],
+    whatsapp: null,
+    order: 3,
+  },
+  {
+    slug: "otxanda",
+    name: "Otxanda",
+    tagline: "Notre spécialiste de l'océan.",
+    role: "Océan · Longe côte · Domicile · FR/EUS",
+    bio: "Bilingue français/basque, passionnée par l'eau sous toutes ses formes. Elle a commencé par le surf avant de se tourner vers la natation. Diplômée d'un Master STAPS et monitrice de surf, elle est très complète et excellente avec les enfants, et très appréciée des parents pour sa personnalité rayonnante. Elle donne ses cours dans l'une ou l'autre langue, au choix de chaque famille.",
+    services: ["ocean", "domicile"],
     whatsapp: null,
     order: 4,
   },

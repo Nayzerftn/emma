@@ -29,7 +29,7 @@ export default async function EquipePage() {
         <Roster members={team} />
       </section>
 
-      <InkStatement titleLines={EQUIPE.sectionTitleLines} />
+      <InkStatement titleLines={EQUIPE.sectionTitleLines} text={EQUIPE.sectionText} />
 
       <CtaBlock
         titleLines={EQUIPE.finalCta.titleLines}

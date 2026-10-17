@@ -10,6 +10,7 @@ s'affiche — déposez le fichier au bon nom et il apparaît immédiatement (auc
 |---|---|---|
 | `hero-poster.jpg` | Accueil — poster de la vidéo hero (Oïana au bassin, visage→nombril, légèrement éclairci) | visage haut |
 | `bassin.jpg` | Bassin privé + offre accueil — piscine intérieure, poutres bois | large, non coupée |
+| `bassin-anglet.jpg` · `bassin-anglet-2.jpg` | Bassin d'Anglet — carte offre + bandeau photo accueil | large |
 | `maison-basque.jpg` | Cours à domicile — maison basque (montrer la maison, pas le toit) | `center 80%` appliqué |
 | `ocean.jpg` | Initiation océan — sauveteurs / vue océan Côte Basque | — |
 | `kinesiologie.jpg` | Kinésiologie — médecine chinoise / fleurs de Bach / buste phrénologie | — |
@@ -21,7 +22,7 @@ s'affiche — déposez le fichier au bon nom et il apparaît immédiatement (auc
 
 Un fichier par experte, cadrage **visage propre** (jamais coupé) :
 
-`emma.jpg` · `elea.jpg` · `oiana.jpg` · `thais.jpg` · `clara.jpg` · `audrey.jpg` · `clara-d.jpg` · `maika.jpg`
+`emma.jpg` · `oiana.jpg` · `thais.jpg` · `otxanda.jpg` · `clara.jpg` · `audrey.jpg` · `clara-d.jpg` · `maika.jpg`
 
 > Les portraits peuvent aussi être gérés depuis l'admin (`/admin/equipe` → upload),
 > qui les stocke dans le bucket Supabase `team-photos` et prend le pas sur le fichier statique.

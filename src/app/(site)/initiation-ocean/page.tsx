@@ -36,6 +36,24 @@ export default function InitiationOceanPage() {
         <PrimaryCta className="mt-10" label={OCEAN.learn.cta.label} href={OCEAN.learn.cta.href} />
       </section>
 
+      <section className="bg-sand py-16 md:py-24">
+        <div className="shell">
+          <Reveal>
+            <SectionHeader
+              eyebrow={OCEAN.longeCote.eyebrow}
+              titleLines={OCEAN.longeCote.titleLines}
+              intro={OCEAN.longeCote.text}
+            />
+          </Reveal>
+          <InfoList items={OCEAN.longeCote.infos} className="mt-12" />
+          <PrimaryCta
+            className="mt-10"
+            label={OCEAN.longeCote.cta.label}
+            href={OCEAN.longeCote.cta.href}
+          />
+        </div>
+      </section>
+
       <CtaBlock
         titleLines={OCEAN.finalCta.titleLines}
         text={OCEAN.finalCta.text}

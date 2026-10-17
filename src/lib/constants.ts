@@ -47,7 +47,10 @@ export function waLink(entry: WhatsAppEntry): string {
 }
 
 /** Communauté WhatsApp — annonces des nouveaux créneaux en avant-première. */
-export const WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/FGVnRbY2T4n9hTxPKayCRb";
+export const WHATSAPP_COMMUNITY_URL = "https://chat.whatsapp.com/LHlim2xnRoGHAz70yszkQx";
+
+/** WhatsApp informations — bulle flottante (toutes pages). */
+export const WHATSAPP_INFO_URL = "https://wa.me/message/I6MC35DUVQANG1";
 
 /** Villes du Pays Basque desservies (marquee + SEO). */
 export const CITIES = [
@@ -72,17 +75,25 @@ export const NAV_LINKS = [
   { label: "Équipe", href: "/equipe" },
   { label: "Bassin privé", href: "/bassin-prive" },
   { label: "À domicile", href: "/cours-a-domicile" },
-  { label: "Initiation océan", href: "/initiation-ocean" },
-  { label: "Kinésiologie", href: "/kinesiologie" },
+  { label: "Océan", href: "/initiation-ocean" },
+  { label: "Aquaphobie", href: "/kinesiologie" },
   { label: "Surf", href: "/surf" },
 ] as const;
 
 export const RESERVATION_HREF = "/reservation";
 
-/** Réservation BASSIN PRIVÉ — Square (cours collectifs / classes). */
-export const SQUARE_BOOKING_URL =
-  "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LJ3931E19TX0B/classes?buttonTextColor=ffffff&color=000000&referrer=so";
+/** Réservation directe BASSIN PRIVÉ BIDART — Square (classes). */
+export const SQUARE_BIDART_URL =
+  "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LJ3931E19TX0B/classes";
 
-/** Réservation RENDEZ-VOUS — Square (domicile, océan). Kiné & surf = WhatsApp. */
+/** Réservation directe BASSIN PRIVÉ ANGLET — Square (classes). */
+export const SQUARE_ANGLET_URL =
+  "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/L09W4B0J03A3W/classes";
+
+/** Réservation directe OCÉAN (initiation + longe côte) — Square (classes). */
+export const SQUARE_OCEAN_URL =
+  "https://book.squareup.com/classes/g7n1j9vp7a40l8/location/LAQ7RPB02MRMJ/classes";
+
+/** Réservation RENDEZ-VOUS — Square (domicile). Kiné & surf = WhatsApp. */
 export const SQUARE_APPOINTMENTS_URL =
   "https://book.squareup.com/appointments/g7n1j9vp7a40l8/location/LJ3931E19TX0B/services";

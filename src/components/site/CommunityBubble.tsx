@@ -1,4 +1,4 @@
-import { WHATSAPP_COMMUNITY_URL } from "@/lib/constants";
+import { WHATSAPP_INFO_URL } from "@/lib/constants";
 
 function WhatsAppGlyph() {
   return (
@@ -8,19 +8,19 @@ function WhatsAppGlyph() {
   );
 }
 
-/** Bulle flottante (toutes pages) : invitation à la communauté WhatsApp. */
+/** Bulle flottante (toutes pages) : WhatsApp informations (questions). */
 export function CommunityBubble() {
   return (
     <a
-      href={WHATSAPP_COMMUNITY_URL}
+      href={WHATSAPP_INFO_URL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Rejoindre la communauté WhatsApp Natation Côte Basque"
+      aria-label="Nous écrire sur WhatsApp — Natation Côte Basque"
       className="bg-ink text-paper fixed right-4 bottom-4 z-50 flex items-center gap-2.5 rounded-full px-4 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)] transition-transform duration-200 hover:scale-[1.04] focus-visible:outline-2 focus-visible:outline-offset-2 md:right-6 md:bottom-6"
     >
       <WhatsAppGlyph />
       <span className="text-[0.78rem] font-semibold tracking-[0.04em] max-sm:sr-only">
-        Rejoindre la communauté
+        Une question ?
       </span>
     </a>
   );

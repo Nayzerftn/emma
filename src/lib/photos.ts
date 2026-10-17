@@ -29,6 +29,18 @@ export const PHOTOS = {
     alt: "Bassin privé couvert et chauffé à Bidart, deux couloirs de 20 mètres pour les cours de natation",
     position: "center center",
   },
+  /** Bassin privé d'Anglet — couvert, chauffé à 33°C (carte offre accueil). */
+  bassinAnglet: {
+    src: "/photos/bassin-anglet.jpg",
+    alt: "Bassin privé couvert et chauffé à 33°C à Anglet pour bébé nageur, aquaphobie et aquagym",
+    position: "center center",
+  },
+  /** Bassin privé d'Anglet — second cadrage (bandeau photo accueil). */
+  bassinAnglet2: {
+    src: "/photos/bassin-anglet-2.jpg",
+    alt: "Piscine intérieure du bassin privé d'Anglet, Natation Côte Basque",
+    position: "center center",
+  },
   /** Cours à domicile — maison basque (montrer la maison, pas le toit). */
   domicile: {
     src: "/photos/maison-basque.jpg",
@@ -38,7 +50,7 @@ export const PHOTOS = {
   /** Initiation océan — sauveteurs / vue océan Côte Basque. */
   ocean: {
     src: "/photos/ocean.jpg",
-    alt: "Initiation à la nage en océan au Port-Vieux de Biarritz et sur les plages d'Anglet",
+    alt: "Initiation océan et longe côte sur les plages de Biarritz, Bidart, Guéthary et Hendaye",
     position: "center center",
   },
   /** Kinésiologie — médecine chinoise, fleurs de Bach, buste de phrénologie. */
@@ -76,11 +88,6 @@ export const TEAM_PHOTOS: Record<string, PhotoSlot> = {
     alt: "Emma, fondatrice de Natation Côte Basque et kinésiologue certifiée à Anglet",
     position: "center 25%",
   },
-  elea: {
-    src: "/photos/equipe/elea.jpg",
-    alt: "Eléa, coordination et secrétariat du collectif Natation Côte Basque",
-    position: "center 25%",
-  },
   oiana: {
     src: "/photos/equipe/oiana.jpg",
     alt: "Oïana, maître-nageuse et spécialiste du mouvement à Biarritz",
@@ -90,6 +97,11 @@ export const TEAM_PHOTOS: Record<string, PhotoSlot> = {
     src: "/photos/equipe/thais.jpg",
     alt: "Thaïs, maître-nageuse et championne du monde de sauvetage côtier",
     position: "center 25%",
+  },
+  otxanda: {
+    src: "/photos/equipe/otxanda.jpg",
+    alt: "Otxanda, maître-nageuse spécialiste de l'océan et du longe côte, bilingue français-basque",
+    position: "center 30%",
   },
   clara: {
     src: "/photos/equipe/clara.jpg",

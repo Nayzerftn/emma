@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/motion/Reveal";
-import { InfoList } from "@/components/site/Typography";
+import { Eyebrow, InfoList } from "@/components/site/Typography";
 import { PrimaryCta } from "@/components/site/CtaButtons";
 import {
   CtaBlock,
   FeatureList,
+  NumberedList,
   PageHero,
   SectionHeader,
+  StepPath,
 } from "@/components/site/blocks";
 import { KINE } from "@/lib/content/kine";
 import { PHOTOS } from "@/lib/photos";
@@ -24,6 +26,16 @@ export default function KinesiologiePage() {
         cta={KINE.hero.cta}
         photo={PHOTOS.kinesiologie}
       />
+
+      <section className="shell py-16 md:py-24">
+        <Reveal>
+          <Eyebrow>{KINE.volets.eyebrow}</Eyebrow>
+        </Reveal>
+        <div className="mt-6">
+          <NumberedList items={KINE.volets.items} />
+        </div>
+        <PrimaryCta className="mt-10" label={KINE.volets.cta.label} href={KINE.volets.cta.href} />
+      </section>
 
       <section className="shell py-16 md:py-24">
         <Reveal>
@@ -57,6 +69,16 @@ export default function KinesiologiePage() {
             label={KINE.experts.cta.label}
             href={KINE.experts.cta.href}
           />
+        </div>
+      </section>
+
+      <section className="shell py-16 md:py-24">
+        <Reveal>
+          <Eyebrow>{KINE.parcours.eyebrow}</Eyebrow>
+          <p className="text-meta mt-4 text-lg leading-relaxed">{KINE.parcours.intro}</p>
+        </Reveal>
+        <div className="mt-10">
+          <StepPath steps={KINE.parcours.steps} />
         </div>
       </section>
 
