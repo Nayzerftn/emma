@@ -75,13 +75,12 @@ export const BASSIN = {
     titleLines: ["Nouveaux créneaux", "à Bidart."],
     items: [
       { title: "Apnée débutant", text: "Adulte / ado." },
-      { title: "Apnée avancé", text: "À venir — novembre 2026." },
-      { title: "Forfait apnée enfant", text: "À venir — novembre 2026." },
+      { title: "Apnée avancé", text: "Adulte / ado." },
     ],
   },
   finalCta: {
     titleLines: ["Réservez", "votre créneau."],
-    text: "Bassin privé couvert et chauffé à Bidart et à Anglet. Enfants en mini-groupes, adultes en individuel. Toute l'année.",
+    text: "Bassin privé couvert et chauffé à Bidart et à Anglet. Enfants en mini-groupes, adultes en séances personnalisées ou mini-groupes. Toute l'année.",
     buttons: [
       ...BOOK_BUTTONS,
       { label: "Voir l'équipe", href: "/equipe", kind: "outline" },

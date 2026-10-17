@@ -17,7 +17,7 @@ export const PAGE_META = {
   bassin: {
     title: "Cours de natation en bassin privé Bidart & Anglet | Natation Côte Basque",
     description:
-      "Cours de natation en piscine privée couverte et chauffée à Bidart. Enfants en mini-groupes de 3, adultes en séances individuelles. 2 couloirs de 20m. Également bassin couvert et chauffé à Anglet pour les publics sensibles : bébé nageur, aquaphobie, aquagym, Niveau 1 enfant. Toute l'année.",
+      "Cours de natation en piscine privée couverte et chauffée à Bidart. Enfants en mini-groupes de 3, adultes en séances personnalisées ou mini-groupes. 2 couloirs de 20m. Également bassin couvert et chauffé à Anglet pour les publics sensibles : bébé nageur, aquaphobie, aquagym, Niveau 1 enfant. Toute l'année.",
     path: "/bassin-prive",
   },
   domicile: {

@@ -15,11 +15,7 @@ export const DOMICILE = {
     eyebrow: "Comment ça marche · 3 étapes",
     titleLines: ["Simple", "et rapide."],
     items: [
-      {
-        n: "01",
-        title: "Vous choisissez votre cours",
-        text: "Enfant ou adulte, selon votre niveau.",
-      },
+      { n: "01", title: "Vous choisissez votre professeure" },
       {
         n: "02",
         title: "Vous réservez votre créneau en ligne",

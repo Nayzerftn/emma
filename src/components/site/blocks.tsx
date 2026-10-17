@@ -258,7 +258,7 @@ export function Testimonials({
 export function NumberedList({
   items,
 }: {
-  items: readonly { n: string; title: string; text: string }[];
+  items: readonly { n: string; title: string; text?: string }[];
 }) {
   return (
     <ol className="border-filet border-t">
@@ -270,7 +270,7 @@ export function NumberedList({
               <h3 className="font-display text-lg font-bold tracking-[-0.01em] md:text-xl">
                 {it.title}
               </h3>
-              <p className="measure text-meta mt-3 leading-relaxed">{it.text}</p>
+              {it.text && <p className="measure text-meta mt-3 leading-relaxed">{it.text}</p>}
             </div>
           </Reveal>
         </li>

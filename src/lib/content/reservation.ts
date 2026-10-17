@@ -42,7 +42,7 @@ export const RESERVATION = {
       title: "Kinésiologie & surf",
       text: "Pour la kinésiologie, le surf ou toute autre question, écrivez-nous sur WhatsApp. On préfère l'écrit pour prendre le temps de bien vous répondre, toujours sous 24h.",
       buttons: [
-        { label: "WhatsApp Maïka — kiné", href: waLink(WHATSAPP.maika) },
+        { label: "WhatsApp Maïka — kinésiologue", href: waLink(WHATSAPP.maika) },
         { label: "WhatsApp Clara D. — surf", href: waLink(WHATSAPP.claraD) },
         { label: "WhatsApp — toute question", href: WHATSAPP_INFO_URL },
       ],
