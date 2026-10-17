@@ -1,4 +1,8 @@
-/** PAGE 8 — RÉSERVATION : 3 chemins, FAQ, CTA (script Emma, octobre 2026). */
+/**
+ * PAGE 8 — RÉSERVATION : 3 chemins, FAQ, CTA (script Emma, octobre 2026).
+ * Retour Emma 17/10 : chemin 01 = domicile, océan, longe côte (réservation en
+ * ligne, pas de recontact) ; bébé nageur / aquagym / aquaphobie = bassins.
+ */
 import {
   SQUARE_ANGLET_URL,
   SQUARE_APPOINTMENTS_URL,
@@ -15,8 +19,8 @@ export const RESERVATION = {
     {
       id: "en-ligne",
       eyebrow: "01 · En ligne",
-      title: "Cours de natation & initiation océan, aquaphobie, aquagym et bébé nageur",
-      text: "Indiquez votre niveau, vos disponibilités et votre adresse. On vous recontacte avec la professeure la plus adaptée et des propositions de créneaux.",
+      title: "Cours de natation à domicile, initiation océan & longe côte",
+      text: "La réservation se fait directement en ligne : choisissez votre cours et votre créneau.",
       buttons: [
         { label: "Réserver à domicile", href: SQUARE_APPOINTMENTS_URL },
         { label: "Je réserve un cours en océan", href: SQUARE_OCEAN_URL },
@@ -26,7 +30,7 @@ export const RESERVATION = {
       id: "bassins",
       eyebrow: "02 · En ligne",
       title: "Bassin privé à Bidart et à Anglet",
-      text: "Choisissez votre créneau et votre professeure directement en ligne.",
+      text: "Choisissez votre créneau et votre professeure directement en ligne. Bébé nageur, aquagym et aquaphobie : au bassin d'Anglet.",
       buttons: [
         { label: "Réserver à Bidart", href: SQUARE_BIDART_URL },
         { label: "Réserver à Anglet", href: SQUARE_ANGLET_URL },
