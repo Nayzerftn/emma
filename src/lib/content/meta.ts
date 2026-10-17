@@ -23,7 +23,7 @@ export const PAGE_META = {
   domicile: {
     title: "Cours de natation à domicile Bayonne Anglet Biarritz | Natation Côte Basque",
     description:
-      "Cours de natation à domicile sur tout le Pays Basque. Enfants et adultes. Jusqu'à 3 enfants du même niveau — moins de 15€ par enfant. Réponse sous 24h.",
+      "Cours de natation à domicile sur tout le Pays Basque. Enfants et adultes. Jusqu'à 3 enfants du même niveau — moins de 15€ par enfant. Réservation en ligne.",
     path: "/cours-a-domicile",
   },
   ocean: {

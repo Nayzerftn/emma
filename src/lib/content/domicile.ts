@@ -17,13 +17,13 @@ export const DOMICILE = {
     items: [
       {
         n: "01",
-        title: "Vous réservez en ligne",
-        text: "Votre niveau, vos disponibilités, votre adresse. 2 minutes.",
+        title: "Vous choisissez votre cours",
+        text: "Enfant ou adulte, selon votre niveau.",
       },
       {
         n: "02",
-        title: "On vous répond sous 24h",
-        text: "On vous envoie la professeure la plus adaptée à vos besoins et vos dispos.",
+        title: "Vous réservez votre créneau en ligne",
+        text: "Directement sur notre page de réservation, en 2 minutes.",
       },
       {
         n: "03",
@@ -34,12 +34,12 @@ export const DOMICILE = {
   },
   accessible: {
     titleLines: ["Nager,", "accessible à tous."],
-    text: "À Bayonne, Anglet, Biarritz et sur toute la Côte Basque, on vous met en relation avec la professeure la plus adaptée à votre profil — enfant ou adulte.",
+    text: "À Bayonne, Anglet, Biarritz et sur toute la Côte Basque, votre professeure vient chez vous — enfant ou adulte.",
     infos: [
       { label: "Âge", value: "Dès 3 ans, sans limite d'âge" },
       { label: "Groupe", value: "Jusqu'à 3 enfants du même niveau" },
       { label: "Période", value: "Toute l'année" },
-      { label: "Réponse", value: "Sous 24h" },
+      { label: "Réservation", value: "Directement en ligne" },
     ],
     offerLabel: "Offre spéciale",
     offer:
@@ -48,7 +48,7 @@ export const DOMICILE = {
   },
   finalCta: {
     titleLines: ["On vient", "chez vous."],
-    text: "Cours de natation à domicile à Bayonne, Anglet, Biarritz — enfant ou adulte. On vous répond sous 24h.",
+    text: "Cours de natation à domicile à Bayonne, Anglet, Biarritz — enfant ou adulte. Réservation directement en ligne.",
     buttons: [
       { label: "Réserver un cours à domicile", href: LEAD_HREF, kind: "primary" },
       { label: "Voir l'équipe", href: "/equipe", kind: "outline" },
