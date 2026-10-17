@@ -10,7 +10,7 @@ s'affiche — déposez le fichier au bon nom et il apparaît immédiatement (auc
 |---|---|---|
 | `hero-poster.jpg` | Accueil — poster de la vidéo hero (Oïana au bassin, visage→nombril, légèrement éclairci) | visage haut |
 | `bassin.jpg` | Bassin privé + offre accueil — piscine intérieure, poutres bois | large, non coupée |
-| `bassin-anglet.jpg` · `bassin-anglet-2.jpg` | Bassin d'Anglet — carte offre + bandeau photo accueil | large |
+| `anglet-bassin.jpg` · `anglet-bassin-2.jpg` | Bassin d'Anglet — carte offre + bandeau photo accueil | large |
 | `maison-basque.jpg` | Cours à domicile — maison basque (montrer la maison, pas le toit) | `center 80%` appliqué |
 | `ocean.jpg` | Initiation océan — sauveteurs / vue océan Côte Basque | — |
 | `kinesiologie.jpg` | Kinésiologie — médecine chinoise / fleurs de Bach / buste phrénologie | — |

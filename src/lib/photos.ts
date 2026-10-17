@@ -31,13 +31,13 @@ export const PHOTOS = {
   },
   /** Bassin privé d'Anglet — couvert, chauffé à 33°C (carte offre accueil). */
   bassinAnglet: {
-    src: "/photos/bassin-anglet.jpg",
+    src: "/photos/anglet-bassin.jpg",
     alt: "Bassin privé couvert et chauffé à 33°C à Anglet pour bébé nageur, aquaphobie et aquagym",
-    position: "center center",
+    position: "center 40%",
   },
   /** Bassin privé d'Anglet — second cadrage (bandeau photo accueil). */
   bassinAnglet2: {
-    src: "/photos/bassin-anglet-2.jpg",
+    src: "/photos/anglet-bassin-2.jpg",
     alt: "Piscine intérieure du bassin privé d'Anglet, Natation Côte Basque",
     position: "center center",
   },
